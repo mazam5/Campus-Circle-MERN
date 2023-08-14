@@ -33,6 +33,20 @@ export const userReducer = createReducer(initialState, (builder) => {
     })
 
 
+    .addCase("updateUserRequest", (state) => {
+      state.loading = true;
+    })
+    .addCase("updateUserSuccess", (state, action) => {
+      state.loading = false;
+      state.user = action.payload;
+      state.isAuthenticated = true;
+    })
+    .addCase("updateUserFailure", (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+      state.isAuthenticated = false;
+    })
+
     .addCase("LoadUserRequest", (state) => {
       state.loading = true;
     })
@@ -46,6 +60,7 @@ export const userReducer = createReducer(initialState, (builder) => {
       state.error = action.payload;
       state.isAuthenticated = false;
     })
+
     .addCase("LogoutRequest",(state) => {
       state.loading = true;
     })
@@ -66,6 +81,8 @@ export const userReducer = createReducer(initialState, (builder) => {
     .addCase("friendsSuccess", (state, action) => {
       state.loading = false;
       state.friend = action.payload;
+      state.isAuthenticated = true;
+
     })
     .addCase("friendFailure", (state, action) => {
       state.loading= true;
@@ -101,8 +118,6 @@ export const userReducer = createReducer(initialState, (builder) => {
       state.error = action.payload;
       state.isAuthenticated = false;
     })
-
-    
 });
 
 

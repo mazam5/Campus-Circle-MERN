@@ -1,0 +1,15 @@
+.upload > input[type="file"] {
+    border-radius: 30px;
+    margin-top: 2vmax;
+  }
+  
+.upload > input[type="file"]::-webkit-file-upload-button {
+    background-color: rgb(38, 63, 173);
+    color: white;
+    width: 100%;
+    padding: 1vmax;
+    border-radius: 50px;
+    border: none;
+    font: 100 1.2rem "Roboto", sans-serif;
+}
+  

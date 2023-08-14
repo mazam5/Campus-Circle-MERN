@@ -15,7 +15,6 @@ import Register from "./components/Register";
 function App() {
   axios.defaults.baseURL = "http://localhost:8800/api/";
   axios.defaults.withCredentials = true;
-
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(LoadUser());

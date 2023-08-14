@@ -33,7 +33,7 @@ export const updatePost = async(req, res, next) => {
     const {userId} = req.body;
     try {
         const post = await Post.findById(id);
-        if(userId===post.userId) {
+        if(userId===post.userId.toString()) {
             const updatedPost = await Post.findByIdAndUpdate(id, {$set : req.body}, {new:true})
             res.status(200).json(updatedPost);
         }
@@ -60,11 +60,11 @@ export const deletePost = async(req,res,next) => {
 // like
 export const like = async(req, res, next)=> {
     const id = req.params.id;
-    const {userId} = req.body;
+    const userId = req.user._id;
     try {
         const post = await Post.findById(id);
         if(!post.likes.includes(userId)) {
-            await post.updateOne({$push : {likes : userId}});
+            await post.updateOne({$push : {likes : userId}}).populate("userId");
             res.status(200).json("post liked!");
         }
         else{

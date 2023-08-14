@@ -1,9 +1,9 @@
 import React, {useEffect, useState} from 'react'
-// import { Avatar } from '@mui/material'
+import { Avatar } from '@mui/material'
 import { useDispatch, useSelector } from 'react-redux'
 import { RegisterUser } from '../Actions/User'
 import { Link } from 'react-router-dom'
-// import Login from './Login'
+import './css/Register.css'
 
 const Register = () => {
     const [email, setEmail] = useState("")
@@ -11,6 +11,7 @@ const Register = () => {
     const [firstName, setFirstName] = useState("")
     const [lastName, setLastName] = useState("")
     const [image, setImage] = useState("")
+    const [profile, setProfile] = useState("")
   
     const dispatch = useDispatch()
 
@@ -32,7 +33,18 @@ const Register = () => {
     const handleImageChange = (e) => {
       const file = e.target.files[0];
       setImage(file);
+
+      const Reader = new FileReader();
+      Reader.readAsDataURL(file);
+  
+      Reader.onload = () => {
+        if (Reader.readyState === 2) {
+          setProfile(Reader.result);
+        }
+      };
+
     }
+
     const {isRegistered} = useSelector((state)=>state.user)
     useEffect(() => {
       if(isRegistered) {
@@ -44,11 +56,17 @@ const Register = () => {
   return (
     <div className='h-screen bg-slate-200 flex items-center'>
         <form className='w-[50%] mx-auto mb-12 p-8 bg-white' onSubmit={handleSubmit} action="">
-            <h1 className='text-4xl text-center mb-3'>Register</h1>
-            <div className="flex ">
-                <input type="file" accept="image/*" className='mx-auto mt-3' onChange={handleImageChange} />
+            <h1 className='text-4xl font-bold text-center mb-3'>Register</h1>
+            <Avatar
+              src={profile}
+              className='mx-auto'
+              alt="User"
+              sx={{ height: "10vmax", width: "10vmax" }}
+            />
+            <div className="upload flex ">
+                <input type="file" accept="image/*" className='mx-auto' onChange={handleImageChange} />
               </div>
-            <input type="text" required className='block w-[70%] mx-auto  p-3 mt-3 rounded-full border outline-none' value={firstName} onChange={(e) => setFirstName(e.target.value)} placeholder='Enter your First Name'/>
+            <input type="text" required className='block w-[70%] mx-auto p-3 mt-3 rounded-full border outline-none' value={firstName} onChange={(e) => setFirstName(e.target.value)} placeholder='Enter your First Name'/>
             <input type="text" required className='block w-[70%] mx-auto p-3 mt-3 rounded-full border outline-none' value = {lastName} onChange={(e) => setLastName(e.target.value)} placeholder='Enter your Last Name'/>
             <input type="email" required className='block w-[70%] mx-auto p-3 mt-3 rounded-full border outline-none' value={email} autoComplete="current-password" onChange={(e) => setEmail(e.target.value)} placeholder='Enter your email'/>
             <input type="password" required className='block w-[70%] mx-auto p-3 mt-3 rounded-full border outline-none' value={password} autoComplete="current-password" onChange={(e) => setPassword(e.target.value)} placeholder='Enter your password'/>

@@ -5,7 +5,7 @@ export const LoginUser = (email, password) => async(dispatch) => {
         dispatch({
             type: "LoginRequest"
         })
-        
+
         const {data} = await axios.post('/auth/login', {email, password}, {
             headers: {
                 "Content-Type": "application/json"
@@ -85,6 +85,30 @@ export const RegisterUser = (formData) => async(dispatch)=> {
   }
 }
 
+export const updateUser = (formData) => async(dispatch)=> {
+  try {
+    dispatch({
+      type:"updateUserRequest"
+    })
+
+    const { data } = await axios.put('/users/update', formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    });
+    console.log(data)
+    dispatch({
+      type: "updateUserSuccess", 
+      payload: data
+    })
+  } catch (error) {
+    dispatch({
+      type: "updateUserFailure", 
+      payload: error.response
+    })
+  }
+}
+
 export const getFriends = () => async(dispatch)=> {
   try {
     dispatch({
@@ -123,6 +147,9 @@ export const toFollow = () => async(dispatch)=> {
     })    
   }
 }
+
+
+
 export const getUser = (id) => async(dispatch)=> {
   try {
     dispatch({

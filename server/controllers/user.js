@@ -42,23 +42,24 @@ export const myProfile = async(req,res,next) => {
 
 // update user
 export const updateUser = async(req,res,next) => {
-    const id = req.params.id;
-    const {currentUserId, admin, password} = req.body;
+    try {
+    const id = req.user._id;
+    const {currentUserId, admin, password} = req.body
 
-    if(currentUserId === id || admin) {
-        try {
+    if(currentUserId === id.toString() || admin) {
             if(password) {
                 const hashedPassword = await bcrypt.hash(password, 10);
                 req.body.password = hashedPassword;
             }
             const user = await User.findByIdAndUpdate(id, {$set: req.body}, {new:true});
             res.status(200).json(user);
-        } catch (error) {
-            return next(new ErrorHandler(error, 404));
+        }
+        else {
+            return next(new ErrorHandler("You can update only your Account", 404));
         }
     }
-    else {
-        return next(new ErrorHandler("You can update only your Account", 404));
+    catch (error) {
+        return next(new ErrorHandler(error, 404));
     }
 }
 
@@ -78,13 +79,12 @@ export const deleteUser = async(req,res,next)=> {
     }
 }
 
-// follow a user
+// follow and unfollow a user
 export const follow = async(req, res, next) => {
-    const id = req.params.id;
-    const {currentUserId} = req.body;
-
+    const {id} = req.params
+    const currentUserId = req.user._id
     try {
-        if(id !== currentUserId) {
+        if(id !== currentUserId.toString()) {
             const currentUser = await User.findById(currentUserId);
             const followUser = await User.findById(id);
             if(!followUser.followers.includes(currentUserId)) {
@@ -93,7 +93,9 @@ export const follow = async(req, res, next) => {
                 res.status(200).json("user followed!");
             }
             else {
-                return next(new ErrorHandler("You already follow this account",403));
+                await currentUser.updateOne({$pull : {following : id}});
+                await followUser.updateOne({$pull : {followers : currentUserId}});
+                res.status(200).json("unfollowed the user!");
             }
         }
         else {
@@ -105,31 +107,31 @@ export const follow = async(req, res, next) => {
 
 }
 // unfollow a user
-export const unfollow = async(req, res, next) => {
-    const id = req.params.id;
-    const {currentUserId} = req.body;
-    try {
-        if(id !== currentUserId) {
-            const currentUser = await User.findById(currentUserId);
-            const unfollowUser = await User.findById(id);
+// export const unfollow = async(req, res, next) => {
+//     const id = req.params.id;
+//     const {currentUserId} = req.body;
+//     try {
+//         if(id !== currentUserId) {
+//             const currentUser = await User.findById(currentUserId);
+//             const unfollowUser = await User.findById(id);
     
-            if(unfollowUser.followers.includes(currentUserId)) {
-                await currentUser.updateOne({$pull : {following : id}});
-                await unfollowUser.updateOne({$pull : {followers : currentUserId}});
-                res.status(200).json("unfollowed the user!");
-            }
-            else {
-                return next(new ErrorHandler("you donot follow this account to unfollow",403));
-            }
-        }
-        else {
-            return next(new ErrorHandler("You cannot unfollow yourself", 403));
-        }
+//             if(unfollowUser.followers.includes(currentUserId)) {
+//                 await currentUser.updateOne({$pull : {following : id}});
+//                 await unfollowUser.updateOne({$pull : {followers : currentUserId}});
+//                 res.status(200).json("unfollowed the user!");
+//             }
+//             else {
+//                 return next(new ErrorHandler("you donot follow this account to unfollow",403));
+//             }
+//         }
+//         else {
+//             return next(new ErrorHandler("You cannot unfollow yourself", 403));
+//         }
         
-    } catch (error) {
-        return next(new ErrorHandler(error, 403));
-    }
-}
+//     } catch (error) {
+//         return next(new ErrorHandler(error, 403));
+//     }
+// }
 
 export const getUserFriends = async (req, res, next) => {
     try {

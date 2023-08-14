@@ -1,11 +1,12 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { userReducer } from "./Reducers/User";
-import { postReducer } from "./Reducers/Post";
+import { likeReducer, postReducer } from "./Reducers/Post";
 
 const store = configureStore({
     reducer: {
         user:userReducer,
-        post: postReducer
+        post: postReducer,
+        likes: likeReducer
     }
 })
 
