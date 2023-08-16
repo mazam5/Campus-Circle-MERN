@@ -118,6 +118,20 @@ export const userReducer = createReducer(initialState, (builder) => {
       state.error = action.payload;
       state.isAuthenticated = false;
     })
+    
+    .addCase("addRemoveUserRequest",(state)=> {
+      state.loading = true;
+    })
+    .addCase("addRemoveUserSuccess",(state,action)=> {
+      state.loading = false;
+      state.relation = action.payload
+      state.isAuthenticated = true;
+    })
+    .addCase("addRemoveUserFailure",(state,action)=> {
+      state.loading = false;
+      state.error = action.payload
+      state.isAuthenticated = true;
+    })
 });
 
 

@@ -32,7 +32,6 @@ export const getFeed = () => async(dispatch) => {
       })
       
       const {data} = await axios.get('/post/feed/all')
-      data.sort((a, b) => new Date(b.updatedAt) - new Date(a.updatedAt))
 
       dispatch({
         type: "feedSuccess",
@@ -65,3 +64,49 @@ export const LikePost = (id) => async(dispatch)=> {
     })
   }
 } 
+
+export const addComment = (id, comment) => async(dispatch)=> {
+  try {
+    dispatch({
+      type: "addCommentRequest"
+    })
+    
+    console.log(comment)
+    const {data} = await axios.put(`/post/comment/${id}`, {comment: comment})
+
+    console.log(data)
+    dispatch({
+      type:"addCommentSuccess",
+      payload: {data}
+    })
+
+  } catch (error) {
+    dispatch({
+      type: "addCommentFailure",
+      payload:error.response
+    })
+  }
+}
+
+export const removeComment = (id, comment) => async(dispatch)=> {
+  try {
+    dispatch({
+      type: "removeCommentRequest"
+    })
+    
+    console.log(comment)
+    const {data} = await axios.put(`/post/comment/${id}`, {comment: comment})
+
+    console.log(data)
+    dispatch({
+      type:"removeCommentSuccess",
+      payload: {data}
+    })
+
+  } catch (error) {
+    dispatch({
+      type: "removeCommentFailure",
+      payload:error.response
+    })
+  }
+}

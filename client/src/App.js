@@ -1,15 +1,15 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import React, { useEffect } from "react"
-import Login from "./components/Login";
-import Home from "./components/Home";
-import Blog from "./components/Blog";
-import Chat from "./components/Chat";
+import Login from "./components/Login/Login";
+import Home from "./components/Home/Home";
+import Blog from "./components/Blog/Blog";
+import Chat from "./components/Chat/Chat";
 import Notification from "./components/Notification";
-import Navbar from "./components/Navbar";
+import Navbar from "./components/Navbar/Navbar";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { LoadUser } from "./Actions/User";
-import Register from "./components/Register";
+import Register from "./components/Register/Register";
 
 
 function App() {

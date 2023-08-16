@@ -1,63 +1,169 @@
-import React, { useEffect } from 'react'
-import PersonRemoveIcon from '@mui/icons-material/PersonRemove';
-import { Button, Divider, Stack, Typography } from '@mui/material';
-import ThumbUpIcon from '@mui/icons-material/ThumbUp';
-import { useDispatch, useSelector } from 'react-redux';
-import { getFeed } from '../../Actions/Post';
-import UserImage from '../utils/UserImage';
-import LikeComment from './LikeComment';
-import List from '../utils/List'
-const Feed = () => {
+import React, { useEffect, useState } from 'react'
+import { Button, Divider, Stack, Typography, Modal, Avatar, Box, TextField, Card } from '@mui/material';
+import { useDispatch } from 'react-redux';
+import { LikePost, addComment, getFeed } from '../../Actions/Post';
+import { Comment, CommentOutlined, EmojiEmotions, Favorite, PersonRemoveOutlined, PersonAddOutlined, FavoriteBorder, Send } from '@mui/icons-material';
+import data from '@emoji-mart/data'
+import Picker from '@emoji-mart/react'
+import Friend from '../utils/Friend';
+import Like from './Like';
+
+const Feed = ({
+  postId, caption, postImage, createdAt, likes = [], comments = [], ownerId, ownerName, ownerAvatar, isDelete = false, isAccount= false, user
+}) => {
+  const [open, setOpen] = useState(false)
+  const [commentToggle, setCommentToggle] = useState(false)
+  const [liked, setLiked] = useState(false)
+  const [comment, setComment] = useState("") 
+  const [openComment, SetOpenComment] = useState(false)
+  const [showEmoji, setShowEmoji] = useState(false)
 
   const dispatch = useDispatch()
-    useEffect(()=> {
-      dispatch(getFeed())
-    },[dispatch])
-    const {feed} = useSelector((state)=> state.post)
-    const {likes} = useSelector((state)=> state)
     
-    const handleClick = () => {
-        <List list = {likes} title="Likes"/>
+    const handleLike = async(id) => {
+      setLiked(!liked)
+      await dispatch(LikePost(id))
+      dispatch(getFeed())
+    }
+    
+    const addEmoji = (e) => {
+      const sys = e.unified.split("_")
+      const codeArray = []
+      sys.forEach((ele)=> codeArray.push("0x"+ele))
+      let emoji = String.fromCodePoint(...codeArray)
+      setComment(comment + emoji)
+    }  
+
+    useEffect(() => {
+      likes.forEach((item) => {
+        if (item._id === user._id) {
+          setLiked(true);
+        }
+      });
+    }, [likes, user._id]);
+
+    const handleClickOpen = () => {
+      setOpen(true);
+    };
+  
+    const handleOpenComment = () => {
+      setCommentToggle(true)
+    }
+    
+    const handleCloseComment = () => {
+      setCommentToggle(false)
+    };
+
+    const handleClose = () => {
+      setOpen(false)
+    };
+  
+    const AddComment = async() => {
+      try {
+        await dispatch(addComment(postId, comment))
+        dispatch(getFeed())
+        SetOpenComment(!openComment)
+        setComment("")
+      } catch (error) {
+        console.log(error) 
+      }
     }
 
   return (
     <>
-    <div className='bg-red-50 p-3 '>
-      {feed && feed.length>0 ? (feed.map((f)=>(
-          <div className='mb-3 bg-red-100' key={f._id}>
-            <div className='flex flex-row p-2'>
-                  <div className='w-[6%] my-auto'>
-                      <UserImage image = {f.userId.avatar} firstName={f.userId.firstName} />
-                  </div>
-                  <div className='w-[80%] pl-3 h-full mx-2'>
-                      <h3 className='flex text-opacity-25 flex-col text-[16px]'>{f.userId.firstName} {f.userId.lastName}</h3>
-                      <span className='text-sm'>{new Date(f.updatedAt).toLocaleString()}</span>
-                  </div>
-                  <div className='w-[10%]'>
-                      <button className='w-full h-full mx-auto my-auto'>
-                          <PersonRemoveIcon />    
-                      </button>
-                  </div>
-            </div>
+    <Card sx={{bgcolor:'lightgrey', m:'2rem'}} >
+            <Friend ownerAvatar={ownerAvatar} createdAt = {createdAt} friendId={ownerId} ownerName={ownerName} />
+
             <Divider variant="middle" className='dark:bg-gray-300'/>
-            <div className='desc p-3 pt-2'>{f.desc}</div>
-            <div className="flex w-full h-64 bg-red-200">
-              <img src={`http://localhost:8800/assets/${f.image}`} alt="postImage" className="object-contain w-full h-full" />
-            </div>
+            <Box p={1} >
+              <Typography variant='p'>{caption}</Typography>
+            </Box>
+            <Box m={1}>
+              <img src={`http://localhost:8800/assets/${postImage}`} alt="postImage" width={'100%'} />
+            </Box>
             <Stack justifyContent={'space-between'} px={3} py={2} direction={'row'} className=' p-3 engage flex flex-row justify-between'>
-              <Button onClick={handleClick} variant='text'><ThumbUpIcon  /> {f.likes.length} likes</Button>
-              <Button variant='text'>{f.comments.length} comments</Button>
+
+              <Button onClick={handleClickOpen} variant='h6'>{likes.length} likes</Button>
+              <Button onClick={handleOpenComment} variant='h6'>{comments.length} comments</Button>
             </Stack>
             <Divider variant="middle" className='dark:bg-gray-300'/>
-            <LikeComment id = {f._id}/>
-          </div>
-      ))):(
-        <Typography variant='h6' align='center' >No posts yet!</Typography >
-      )}
-      
-      </div>
+            <Stack p={2} justifyContent={'space-around'} direction={'row'} >
+                <Button onClick={()=>handleLike(postId)} >{liked ? <Favorite color='error'/> : <FavoriteBorder/>}</Button>
+                <Button onClick={()=> SetOpenComment(!openComment)} >{openComment ? <CommentOutlined /> : <Comment /> }</Button>
+            </Stack> 
+            <Stack direction={'row'} my={'auto'} gap={1} sx={{width:'100%' ,display:(openComment ? 'block':'none'), height:'4rem'}}>
+              <TextField
+                multiline
+                variant="standard"
+                height='100%'
+                placeholder={"Add a comment..."}
+                value={comment}
+                maxRows={2}
+                onChange={(e)=> setComment(e.target.value)}
+                sx={{paddingY:"auto", marginLeft:'2rem', width:'70%'}} 
+              />
+              <EmojiEmotions color='primary' sx={{my:"auto"}} onClick={()=>{setShowEmoji(!showEmoji);}}/>
+              <Button onClick={AddComment}><Send/></Button>
+            </Stack>
+          <Modal open={open} onClose={handleClose}>
+            <Box sx={{ position: 'absolute', top: '50%', left: '50%', outline:'none', border:'none', transform: 'translate(-50%, -50%)', width: 600, height: 300, bgcolor: 'background.paper', boxShadow: 24, p: 2 }}>
+
+              <Typography variant='h5' align='center' color={'gray'} m={1}>Likes</Typography>
+              <Divider variant="middle" className='dark:bg-gray-300'/>
+
+              <Box sx={{ maxHeight: '220px', overflowY: 'scroll' }}>
+              { likes && likes.length>0 ? likes.map((l) =>(
+                <Box m={3} key={l.userId}>
+                    <Like ownerAvatar={l.avatar} ownerName={l.firstName +" "+ l.lastName} friendId={l._id} />
+                    </Box> 
+                  )):(
+                    <Typography variant='h6' m={2} >No likes yet!</Typography>
+                    )
+                  }
+              </Box>
+            </Box>
+          </Modal>
+          <Modal open={commentToggle} onClose={handleCloseComment}>
+            <Box sx={{ position: 'absolute', top: '50%', left: '50%', outline:'none', border:'none', transform: 'translate(-50%, -50%)', width: 600, height: 300, bgcolor: 'background.paper', boxShadow: 24, p: 2 }}>
+
+              <Typography variant='h5' align='center' color={'gray'} m={1}>Comments</Typography>
+              <Divider variant="middle" className='dark:bg-gray-300'/>
+              <Box sx={{ maxHeight: '220px', overflowY: 'scroll' }}>
+              { comments && comments.length>0 ? comments.map((comment) =>(
+                  <Box m={3} key={comment._id} overflow={'hidden'} >
+                  <Stack gap={2} direction={'row'}  spacing={2} > 
+                    <Avatar
+                    src={`http://localhost:8800/assets/${comment.user.avatar}`}
+                    alt={comment.user.firstName.toUpperCase()}
+                    />
+                    <Box bgcolor={'whitesmoke'} width={'100%'}>
+                      <Typography varient='h1' sx={{fontWeight: 800}} width={'60%'}>{comment.user.firstName} {comment.user.lastName}</Typography>
+                      <Typography varient='h6' width={'100%'}>{comment.comment}</Typography>
+                    </Box>
+                    </Stack>
+                    </Box>
+                  )):(
+                    <Typography variant='h6' m={2} >No comments yet!</Typography>
+                  )
+                }
+                </Box>
+            </Box>
+          </Modal>
+          {showEmoji && (
+              <div className="absolute bottom-[1%] right-[22%]">
+                <Picker
+                  data={data}
+                  emojiSize={20}
+                  emojiButtonSize={28}
+                  onEmojiSelect={addEmoji}
+                  maxFrequentRows={0}
+                />
+              </div>
+            )}
+      </Card>
     </>
   )
 }
 
 export default Feed
+

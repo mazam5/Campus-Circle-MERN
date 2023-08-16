@@ -2,7 +2,7 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import LogoutIcon from '@mui/icons-material/Logout';
 import { useDispatch } from 'react-redux';
-import { Logout } from '../Actions/User';
+import { Logout } from '../../Actions/User';
 
 function Navbar() {
   const dispatch = useDispatch();

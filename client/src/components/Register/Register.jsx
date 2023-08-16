@@ -1,9 +1,9 @@
 import React, {useEffect, useState} from 'react'
 import { Avatar } from '@mui/material'
 import { useDispatch, useSelector } from 'react-redux'
-import { RegisterUser } from '../Actions/User'
 import { Link } from 'react-router-dom'
-import './css/Register.css'
+import '../css/Register.css'
+import { RegisterUser } from '../../Actions/User'
 
 const Register = () => {
     const [email, setEmail] = useState("")

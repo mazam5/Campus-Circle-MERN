@@ -4,33 +4,33 @@ const initialState = {};
 
 export const postReducer = createReducer(initialState, (builder) => {
   builder
-
-    .addCase("mypostRequest", (state)=> {
-      state.loading = true
-    })
-    .addCase("mypostSuccess", (state, action)=> {
-      state.loading = false
-      state.mypost = action.payload
-    })
-    .addCase("mypostFailure", (state, action)=> {
-      state.loading = true
-      state.error = action.payload
-    })
-
-
-    .addCase("userPostRequest", (state)=> {
-      state.loading = true
-    })
+  
+  .addCase("mypostRequest", (state)=> {
+    state.loading = true
+  })
+  .addCase("mypostSuccess", (state, action)=> {
+    state.loading = false
+    state.mypost = action.payload
+  })
+  .addCase("mypostFailure", (state, action)=> {
+    state.loading = false
+    state.error = action.payload
+  })
+  
+  
+  .addCase("userPostRequest", (state)=> {
+    state.loading = true
+  })
     .addCase("userPostSuccess", (state, action)=> {
       state.loading = false
       state.userPosts = action.payload
     })
     .addCase("userPostFailure", (state, action)=> {
-      state.loading = true
+      state.loading = false
       state.error = action.payload
     })
-
-
+    
+    
     .addCase("feedRequest", (state)=> {
       state.loading=true;
     })
@@ -39,30 +39,45 @@ export const postReducer = createReducer(initialState, (builder) => {
       state.feed = action.payload;
     })
     .addCase("feedFailure", (state, action) => {
-      state.loading = true;
+      state.loading = false;
       state.error = action.payload;
     })
-
     
-});
-
-
-
-export const likeReducer = createReducer(initialState, (builder) => {
-  builder
-
     .addCase("likeRequest", (state)=> {
       state.loading = true
     })
     .addCase("likeSuccess", (state, action)=> {
       state.loading = false
-      state.likes = action.payload
+      state.like = action.payload
     })
     .addCase("likeFailure", (state, action)=> {
+      state.loading = false
+      state.error = action.payload
+    })
+
+    .addCase("addCommentRequest", (state)=> {
       state.loading = true
+    })
+    .addCase("addCommentSuccess", (state, action)=> {
+      state.loading = false
+      state.message = action.payload
+    })
+    .addCase("addCommentFailure", (state, action)=> {
+      state.loading = false
+      state.error = action.payload
+    })
+
+    .addCase("removeCommentRequest", (state)=> {
+      state.loading = true
+    })
+    .addCase("removeCommentSuccess", (state, action)=> {
+      state.loading = false
+      state.message = action.payload
+    })
+    .addCase("removeCommentFailure", (state, action)=> {
+      state.loading = false
       state.error = action.payload
     })
     
-});
-
-
+  });
+  

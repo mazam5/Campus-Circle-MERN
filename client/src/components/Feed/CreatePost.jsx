@@ -31,7 +31,7 @@ const CreatePost = () => {
     setOpen(false);
   };
 
-  const handleCreatePost = () => {
+  const handleCreatePost = async() => {
     const formData = new FormData();
     formData.append('desc', desc);
     formData.append('userId', user._id)
@@ -41,7 +41,7 @@ const CreatePost = () => {
       formData.append('picture', image);
       formData.append('image', image.name)
     }
-    dispatch(createPost(formData))
+    await dispatch(createPost(formData))
     dispatch(getFeed())
     handleClose()
   }

@@ -76,17 +76,44 @@ export const like = async(req, res, next)=> {
     }
 }
 
-// comment
+// getLikeUser
+export const getLikeList = async(req,res,next) => {
+    const {id} = req.params
+    try {
+        const post = await Post.findById(id).populate("likes")
+        
+        res.status(200).json(post.likes);
+    } catch (error) {
+        return next(new ErrorHandler(error, 400))
+    }
+}
+
+
+// add Comment
 export const comment = async(req,res,next) => {
     const id = req.params.id;
-    const {userId, comment} = req.body;
+    const {comment} = req.body;
     try {
         const post = await Post.findById(id);
-        const newComment = req.body;
-        console.log(newComment);
-        await post.updateOne({$push: {comments: {user: userId, comment:comment}}});
-
+        console.log(req.body)
+        console.log(comment)
+        await post.updateOne({$push: {comments: {user: req.user._id, comment:comment}}});
         res.status(200).json("added the comment!");
+    } catch (error) {
+        return next(new ErrorHandler(error, 400));
+    }
+}
+
+// delete Comment
+export const deleteComment = async(req,res,next) => {
+    const id = req.params.id
+    try {
+        const post = await Post.findById(id);
+        console.log(req.body)
+        console.log(comment)
+        await post.deleteOne({$pull: {comments: {user: req.user._id, comment:comment}}});
+        res.status(200).json("added the comment!");
+        
     } catch (error) {
         return next(new ErrorHandler(error, 400));
     }
@@ -95,7 +122,7 @@ export const comment = async(req,res,next) => {
 export const getFeedPost = async(req,res,next)=> {
     try {
         const post = await Post.find().populate("userId likes comments.user");
-        res.status(200).json(post)
+        res.status(200).json(post.reverse())
     } catch (error) {
         return next(new ErrorHandler(error, 400));
     }

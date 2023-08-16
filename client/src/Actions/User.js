@@ -148,7 +148,27 @@ export const toFollow = () => async(dispatch)=> {
   }
 }
 
+// follow / unfollow User
+export const addRemoveUser = (id) => async(dispatch)=> {
+  try {
+    dispatch({
+      type: "addRemoveUserRequest"
+    })
 
+    const {data} = await axios.put(`/users/${id}`);
+
+    dispatch({
+      type:"addRemoveUserSuccess",
+      payload:data
+    })
+
+  } catch (error) {
+    dispatch({
+      type:"addRemoveUserFailure",
+      payload: error.response
+    })
+  }
+}
 
 export const getUser = (id) => async(dispatch)=> {
   try {

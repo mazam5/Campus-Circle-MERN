@@ -6,7 +6,7 @@ import bcrypt from 'bcrypt';
 export const getUser = async (req, res, next)=> {
     const id = req.params.id
     try {
-        const user = await User.findById(id);
+        const user = await User.findById(id).populate("following followers");
         if(user) {
             user.viewedProfiles += 1
             await user.save()
@@ -22,12 +22,13 @@ export const getUser = async (req, res, next)=> {
 
 // my profile
 export const myProfile = async(req,res,next) => {
-    const id = req.user._id
+    
+    const id = req.user? req.user._id : null
     if(!id) {
         return next(new ErrorHandler("login first", 400))
     }
     try {
-        const user = await User.findById(id);
+        const user = await User.findById(id).populate("following followers");
         if(user) {
             res.status(200).json(user);
         }
@@ -84,12 +85,12 @@ export const follow = async(req, res, next) => {
     const {id} = req.params
     const currentUserId = req.user._id
     try {
-        if(id !== currentUserId.toString()) {
+        if(id.toString() !== currentUserId.toString()) {
             const currentUser = await User.findById(currentUserId);
             const followUser = await User.findById(id);
             if(!followUser.followers.includes(currentUserId)) {
-                await followUser.updateOne({$push : {followers : currentUserId}});
-                await currentUser.updateOne({$push : {following : id}});
+                await followUser.updateOne({$push : {followers : currentUserId}})
+                await currentUser.updateOne({$push : {following : id}})
                 res.status(200).json("user followed!");
             }
             else {
