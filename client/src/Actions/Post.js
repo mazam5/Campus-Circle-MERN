@@ -88,16 +88,17 @@ export const addComment = (id, comment) => async(dispatch)=> {
   }
 }
 
-export const removeComment = (id, comment) => async(dispatch)=> {
+export const removeComment = (id, commentId) => async(dispatch)=> {
   try {
     dispatch({
       type: "removeCommentRequest"
     })
     
-    console.log(comment)
-    const {data} = await axios.put(`/post/comment/${id}`, {comment: comment})
+    console.log(commentId)
+    const {data} = await axios.delete(`/post/comment/${id}`, {
+      data: { commentId },
+    })
 
-    console.log(data)
     dispatch({
       type:"removeCommentSuccess",
       payload: {data}
@@ -106,7 +107,7 @@ export const removeComment = (id, comment) => async(dispatch)=> {
   } catch (error) {
     dispatch({
       type: "removeCommentFailure",
-      payload:error.response
+      payload:error.response.data
     })
   }
 }

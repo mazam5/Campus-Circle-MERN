@@ -17,7 +17,7 @@ const FollowUsers = () => {
     }
     const {followList} = useSelector((state)=> state.user)
   return (
-    <div className='m-8 h-1/3 bg-orange-200'>
+    <Box maxHeight={'220px'} className='bg-orange-200'>
         <Typography variant='h5'>Pending Requests</Typography>
         <Box sx={{ maxHeight: '180px', overflowY: 'scroll' }}>
         {followList && followList.length>0 ? (followList.map((f) => (
@@ -32,7 +32,7 @@ const FollowUsers = () => {
             <Typography align='center' m={2} variant='h6'>No Requests yet!</Typography>
         )} 
         </Box>
-    </div>
+    </Box>
   )
 }
 

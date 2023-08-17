@@ -7,7 +7,7 @@ import DialogTitle from "@mui/material/DialogTitle";
 import { Edit, ManageAccounts } from "@mui/icons-material";
 import { useDispatch, useSelector } from "react-redux";
 import { styled } from "@mui/material/styles";
-import { Avatar, Grid } from "@mui/material";
+import { Avatar, Box, Grid } from "@mui/material";
 import { updateUser } from "../../Actions/User";
 import '../css/external.css'
 
@@ -93,15 +93,15 @@ const UserModal = () => {
   }
 
   return (
-    <div>
-      <Button className="he" onClick={handleClickOpen}>
+    <Box>
+      <Button onClick={handleClickOpen}>
         <ManageAccounts />
       </Button>
-      <Dialog open={open} className="" onClose={handleClose}>
+      <Dialog open={open} onClose={handleClose}>
         <DialogTitle>
           Edit Profile <Edit />
         </DialogTitle>
-        <div className="p-5">
+        <Box className="p-5">
         <Avatar
               src={profile !== avatar ? profile : `http://localhost:8800/assets/${user.avatar}` }
               className='hee mx-auto'
@@ -200,9 +200,9 @@ const UserModal = () => {
             <Button onClick={handleClose}>Cancel</Button>
             <Button onClick={handleUpdate}>Apply</Button>
           </DialogActions>
-        </div>
+        </Box>
       </Dialog>
-    </div>
+    </Box>
   );
 }
 

@@ -19,7 +19,6 @@ export const getPost = async(req,res,next) => {
 
     try {
         const post = await Post.findById(id);
-        console.log(post)
         res.status(200).json(post);
     }
     catch (error){
@@ -95,8 +94,6 @@ export const comment = async(req,res,next) => {
     const {comment} = req.body;
     try {
         const post = await Post.findById(id);
-        console.log(req.body)
-        console.log(comment)
         await post.updateOne({$push: {comments: {user: req.user._id, comment:comment}}});
         res.status(200).json("added the comment!");
     } catch (error) {
@@ -106,17 +103,66 @@ export const comment = async(req,res,next) => {
 
 // delete Comment
 export const deleteComment = async(req,res,next) => {
-    const id = req.params.id
     try {
-        const post = await Post.findById(id);
-        console.log(req.body)
-        console.log(comment)
-        await post.deleteOne({$pull: {comments: {user: req.user._id, comment:comment}}});
-        res.status(200).json("added the comment!");
-        
-    } catch (error) {
-        return next(new ErrorHandler(error, 400));
-    }
+        const post = await Post.findById(req.params.id);
+    
+        if (!post) {
+          return res.status(404).json({
+            success: false,
+            message: "Post not found",
+          });
+        }
+    
+        // Checking If owner wants to delete
+    
+        if (post.userId.toString() === req.user._id.toString()) {
+          if (req.body.commentId === undefined) {
+            return res.status(400).json({
+              success: false,
+              message: "Comment Id is required",
+            });
+          }
+
+          const commentIndex = post.comments.findIndex(
+            (comment) => comment._id.toString() === req.body.commentId.toString()
+          );
+      
+          if (commentIndex === -1) {
+            return next(new ErrorHandler("Comment not Found", 404))
+          }
+    
+          post.comments.forEach((item, index) => {
+            if (item._id.toString() === req.body.commentId.toString()) {
+              return post.comments.splice(index, 1);
+            }
+          });
+    
+          await post.save();
+    
+          return res.status(200).json({
+            success: true,
+            message: "Selected Comment has deleted",
+          });
+        } else {
+          post.comments.forEach((item, index) => {
+            if (item.user.toString() === req.user._id.toString()) {
+              return post.comments.splice(index, 1);
+            }
+          });
+    
+          await post.save();
+    
+          return res.status(200).json({
+            success: true,
+            message: "Your Comment has deleted",
+          });
+        }
+      } catch (error) {
+        res.status(500).json({
+          success: false,
+          message: error.message,
+        });
+      }
 }
 
 export const getFeedPost = async(req,res,next)=> {

@@ -23,8 +23,8 @@ const Friend = () => {
   const {following} = useSelector((state)=> state.user.user)
   return (
     
-    <div className='m-8 h-1/3 bg-orange-200'>
-        <p className='text-2xl '>Following</p>
+    <Box m={3} maxHeight={'220px'} className='bg-orange-200'>
+        <Typography variant='h5'>Following</Typography>
         <Box sx={{ maxHeight: '180px', overflowY: 'scroll' }}>
         {following && following.length>0 ? (following.map((f)=> (
           <Stack direction={'row'} spacing={2} m={2} alignItems={'center'} key={f._id}>
@@ -50,7 +50,7 @@ const Friend = () => {
           <Typography align='center' m={2} variant='h6'>No followings yet!</Typography>
           )}
         </Box>
-    </div>
+    </Box>
   )
 }
 

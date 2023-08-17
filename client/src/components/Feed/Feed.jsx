@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react'
-import { Button, Divider, Stack, Typography, Modal, Avatar, Box, TextField, Card } from '@mui/material';
+import { Button, Divider, Stack, Typography, Modal, Box, TextField, Card } from '@mui/material';
 import { useDispatch } from 'react-redux';
 import { LikePost, addComment, getFeed } from '../../Actions/Post';
-import { Comment, CommentOutlined, EmojiEmotions, Favorite, PersonRemoveOutlined, PersonAddOutlined, FavoriteBorder, Send } from '@mui/icons-material';
+import { Comment, CommentOutlined, EmojiEmotions, Favorite, FavoriteBorder, Send } from '@mui/icons-material';
 import data from '@emoji-mart/data'
 import Picker from '@emoji-mart/react'
 import Friend from '../utils/Friend';
 import Like from './Like';
+import CommentComp from './CommentComp';
 
 const Feed = ({
   postId, caption, postImage, createdAt, likes = [], comments = [], ownerId, ownerName, ownerAvatar, isDelete = false, isAccount= false, user
@@ -78,7 +79,7 @@ const Feed = ({
             <Box p={1} >
               <Typography variant='p'>{caption}</Typography>
             </Box>
-            <Box m={1}>
+            <Box m={1} display={ postImage ? 'block' : 'none'}>
               <img src={`http://localhost:8800/assets/${postImage}`} alt="postImage" width={'100%'} />
             </Box>
             <Stack justifyContent={'space-between'} px={3} py={2} direction={'row'} className=' p-3 engage flex flex-row justify-between'>
@@ -113,9 +114,9 @@ const Feed = ({
 
               <Box sx={{ maxHeight: '220px', overflowY: 'scroll' }}>
               { likes && likes.length>0 ? likes.map((l) =>(
-                <Box m={3} key={l.userId}>
+                  <Box m={3} key={l.userId}>
                     <Like ownerAvatar={l.avatar} ownerName={l.firstName +" "+ l.lastName} friendId={l._id} />
-                    </Box> 
+                  </Box> 
                   )):(
                     <Typography variant='h6' m={2} >No likes yet!</Typography>
                     )
@@ -131,17 +132,8 @@ const Feed = ({
               <Box sx={{ maxHeight: '220px', overflowY: 'scroll' }}>
               { comments && comments.length>0 ? comments.map((comment) =>(
                   <Box m={3} key={comment._id} overflow={'hidden'} >
-                  <Stack gap={2} direction={'row'}  spacing={2} > 
-                    <Avatar
-                    src={`http://localhost:8800/assets/${comment.user.avatar}`}
-                    alt={comment.user.firstName.toUpperCase()}
-                    />
-                    <Box bgcolor={'whitesmoke'} width={'100%'}>
-                      <Typography varient='h1' sx={{fontWeight: 800}} width={'60%'}>{comment.user.firstName} {comment.user.lastName}</Typography>
-                      <Typography varient='h6' width={'100%'}>{comment.comment}</Typography>
-                    </Box>
-                    </Stack>
-                    </Box>
+                    <CommentComp userId = {comment.user._id} image = {comment.user.avatar} postId = {postId} commentId = {comment._id} firstName ={comment.user.firstName} name = {comment.user.firstName+ " "+comment.user.lastName} comment= {comment.comment} />
+                  </Box>
                   )):(
                     <Typography variant='h6' m={2} >No comments yet!</Typography>
                   )

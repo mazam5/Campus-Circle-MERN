@@ -6,7 +6,6 @@ import ArticleIcon from '@mui/icons-material/Article';
 import { useDispatch, useSelector } from 'react-redux';
 import UserImage from '../utils/UserImage';
 import { createPost, getFeed } from '../../Actions/Post';
-// import profile from '../../assets/post.jpg'
 import AddPhotoAlternateIcon from '@mui/icons-material/AddPhotoAlternate';
 import { AttachFile, Edit, EmojiEmotions, VideoCameraBack } from '@mui/icons-material';
 import data from '@emoji-mart/data'
@@ -36,8 +35,6 @@ const CreatePost = () => {
     formData.append('desc', desc);
     formData.append('userId', user._id)
     if(image) {
-      // formData.append('picture', )
-      // formData.append('image', image)
       formData.append('picture', image);
       formData.append('image', image.name)
     }
@@ -56,7 +53,6 @@ const CreatePost = () => {
 
   const handleAddPhoto = (e) => {
     e.preventDefault();
-    // Click the hidden input element when the icon is clicked
     inputFileRef.current.click();
   };
 
@@ -80,21 +76,19 @@ const CreatePost = () => {
   }
 
   return (
-    <div className='mt-2 mb-3 w-full h-1/5 bg-slate-200'>
-      <div className='p-3 h-[60%] flex'>
-        <div className='w-[10%] my-auto'>
-            <UserImage image={user.avatar} firstName={user.firstName} />
-        </div>
-        <div className='w-full my-auto' onClick={handleClickOpen}>
-          <textarea type="text" placeholder="What's on you mind?" className='px-3 my-auto outline-none bg-white rounded-full w-full' disabled/>
-        </div>
-      </div>
+    <Box m={3} mt={1} className='bg-slate-200'>
+      <Stack direction={'row'} p={2} gap={2} alignItems={'center'} >
+        <UserImage image={user.avatar} firstName={user.firstName} />
+        <Box onClick={handleClickOpen} width={'100%'}>
+          <textarea type="text" placeholder="What's on you mind?" className='px-3 outline-none bg-white rounded-full w-full' disabled/>
+        </Box>
+      </Stack>
       <Divider variant="middle" className='dark:bg-gray-800'/>
-      <div className='flex h-[40%] px-8 justify-between'>
+      <Stack direction={'row'} p={1} justifyContent={'space-around'} alignItems={'center'}>
         <Button onClick={handleClickOpen} startIcon={<AddAPhotoIcon/>}>Photo</Button>
         <Button onClick={handleClickOpen} startIcon={<DuoIcon/>}>Video</Button>
         <Button onClick={handleClickOpen} startIcon={<ArticleIcon/>}>Blog</Button>
-      </div>
+      </Stack>
     <Modal open={open} onClose={handleClose}>
       <Box sx={{ position: 'absolute', top: '50%', left: '50%', outline:'none', border:'none', transform: 'translate(-50%, -50%)', width: 600, height: ( image ? 525 : 300), bgcolor: 'background.paper', boxShadow: 24, p: 4 }}>
         <Typography variant='h6' color={'gray'} align='center'>Create Post</Typography>
@@ -135,7 +129,7 @@ const CreatePost = () => {
         </Button>
       </Box>
     </Modal>
-    </div>
+    </Box>
   )
 }
 
