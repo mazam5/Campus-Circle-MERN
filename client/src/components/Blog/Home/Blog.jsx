@@ -1,8 +1,9 @@
+import { Box } from '@mui/material'
 import React from 'react'
 
 function Blog() {
   return (
-    <div>Blog</div>
+    <Box>Blog</Box>
   )
 }
 

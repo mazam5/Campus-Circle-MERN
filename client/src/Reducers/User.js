@@ -32,7 +32,6 @@ export const userReducer = createReducer(initialState, (builder) => {
       state.isAuthenticated = false;
     })
 
-
     .addCase("updateUserRequest", (state) => {
       state.loading = true;
     })
@@ -60,13 +59,15 @@ export const userReducer = createReducer(initialState, (builder) => {
       state.error = action.payload;
       state.isAuthenticated = false;
     })
-
+    
     .addCase("LogoutRequest",(state) => {
       state.loading = true;
     })
     .addCase("LogoutSuccess", (state)=> {
       state.loading = false;
       state.user = null;
+      state.followList =null;
+      state.myposts = null;
       state.isAuthenticated = false;
     }) 
     .addCase("LogoutFailure", (state, action) => {
@@ -82,14 +83,13 @@ export const userReducer = createReducer(initialState, (builder) => {
       state.loading = false;
       state.friend = action.payload;
       state.isAuthenticated = true;
-
     })
     .addCase("friendFailure", (state, action) => {
       state.loading= true;
       state.error = action.payload;
       state.isAuthenticated = false;
     })
-
+    
     .addCase("toFollowRequest", (state)=> {
       state.loading=true;
     })
@@ -104,7 +104,7 @@ export const userReducer = createReducer(initialState, (builder) => {
       state.isAuthenticated = false;
     })
 
-
+    
     .addCase("userRequest", (state)=> {
       state.loading=true;
     })
@@ -132,8 +132,42 @@ export const userReducer = createReducer(initialState, (builder) => {
       state.error = action.payload
       state.isAuthenticated = true;
     })
-});
+    
+    .addCase("removeFollowerRequest", (state) => {
+      state.loading = true;
+    })
+    .addCase("removeFollowerSuccess", (state, action) => {
+      state.loading = false;
+      state.message = action.payload;
+      state.isAuthenticated = true;
+    })
+    .addCase("removeFollowerFailure", (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+      state.isAuthenticated = false;
+    })
+  });
+  
 
+export const userProfileReducer = createReducer(initialState, (builder) => {
+  builder
+
+  .addCase("userProfileRequest", (state)=> {
+    state.loading=true;
+  })
+  .addCase("userProfileSuccess", (state, action)=> {
+    state.loading = false;
+    state.user = action.payload;
+    state.isAuthenticated = true;
+  })
+  .addCase("userProfileFailure", (state, action) => {
+    state.loading = true;
+    state.error = action.payload;
+    state.isAuthenticated = false;
+  })
+    
+  });
+  
 
 
 

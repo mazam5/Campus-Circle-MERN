@@ -26,6 +26,7 @@ const userSchema = new mongoose.Schema({
     desc: String,
     location: String,
     occupation:String,
+    company:String,
     followers: [
         {
             type: mongoose.Schema.Types.ObjectId,

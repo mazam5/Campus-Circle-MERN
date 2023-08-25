@@ -5,13 +5,14 @@ import DuoIcon from '@mui/icons-material/Duo';
 import ArticleIcon from '@mui/icons-material/Article';
 import { useDispatch, useSelector } from 'react-redux';
 import UserImage from '../utils/UserImage';
-import { createPost, getFeed } from '../../Actions/Post';
+import { createPost, getFeed, getMyPost } from '../../Actions/Post';
 import AddPhotoAlternateIcon from '@mui/icons-material/AddPhotoAlternate';
 import { AttachFile, Edit, EmojiEmotions, VideoCameraBack } from '@mui/icons-material';
 import data from '@emoji-mart/data'
 import Picker from '@emoji-mart/react'
+import { Link } from 'react-router-dom';
 
-const CreatePost = () => {
+const CreatePost = ({isAccount = false}) => {
   const [desc, setDesc] = useState("")
   const [showEmoji, setShowEmoji] = useState(false)
   const [image, setImage] = useState("")
@@ -39,7 +40,12 @@ const CreatePost = () => {
       formData.append('image', image.name)
     }
     await dispatch(createPost(formData))
-    dispatch(getFeed())
+    if(isAccount) {
+      dispatch(getMyPost())
+    }
+    else {
+      dispatch(getFeed())
+    }
     handleClose()
   }
 
@@ -78,7 +84,9 @@ const CreatePost = () => {
   return (
     <Box m={3} mt={1} className='bg-slate-200'>
       <Stack direction={'row'} p={2} gap={2} alignItems={'center'} >
-        <UserImage image={user.avatar} firstName={user.firstName} />
+        <Link to={`/user/${user._id}`}>
+          <UserImage image={user.avatar} firstName={user.firstName} />
+        </Link>
         <Box onClick={handleClickOpen} width={'100%'}>
           <textarea type="text" placeholder="What's on you mind?" className='px-3 outline-none bg-white rounded-full w-full' disabled/>
         </Box>
@@ -89,6 +97,8 @@ const CreatePost = () => {
         <Button onClick={handleClickOpen} startIcon={<DuoIcon/>}>Video</Button>
         <Button onClick={handleClickOpen} startIcon={<ArticleIcon/>}>Blog</Button>
       </Stack>
+
+      
     <Modal open={open} onClose={handleClose}>
       <Box sx={{ position: 'absolute', top: '50%', left: '50%', outline:'none', border:'none', transform: 'translate(-50%, -50%)', width: 600, height: ( image ? 525 : 300), bgcolor: 'background.paper', boxShadow: 24, p: 4 }}>
         <Typography variant='h6' color={'gray'} align='center'>Create Post</Typography>

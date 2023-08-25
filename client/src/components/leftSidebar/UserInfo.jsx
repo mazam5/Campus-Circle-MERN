@@ -8,15 +8,19 @@ import VerifiedIcon from '@mui/icons-material/Verified';
 import { useSelector } from 'react-redux';
 import Modal from './UserModal'
 import UserImage from '../utils/UserImage';
+import { Link } from 'react-router-dom';
 
 const UserInfo = () => {
     const {user} = useSelector((state) => state.user)
   return (
-    <Box className='bg-orange-200'>
+    <Box  className='bg-orange-200'>
         <Stack direction={'row'} gap={1} p={2} alignItems={'center'}>
-                <UserImage image={user.avatar} firstName={user.firstName} />
+            <UserImage image={user.avatar} firstName={user.firstName} />
             <Stack direction={'column'} width={'100%'}>
+                <Link to={`/user/${user._id}`}>
+
                 <Typography variant='h6'>{user.firstName} {user.lastName} <VerifiedIcon/></Typography>
+                </Link>
                 <Typography variant='p' >{user.followers.length} Followers</Typography>
             </Stack>
             <Modal />

@@ -11,7 +11,7 @@ import { Avatar, Box, Grid } from "@mui/material";
 import { updateUser } from "../../Actions/User";
 import '../css/external.css'
 
-const UserModal = () => {
+const UserModal = ({show = false}) => {
   const dispatch = useDispatch()
   const [open, setOpen] = useState(false);
   const { user } = useSelector((state) => state.user)
@@ -71,7 +71,7 @@ const UserModal = () => {
         formData.append('desc', desc);
 
       dispatch(updateUser(formData));
-      handleClose();
+      handleClose()
     } catch (error) {
       console.log(error)
     }
@@ -94,7 +94,8 @@ const UserModal = () => {
 
   return (
     <Box>
-      <Button onClick={handleClickOpen}>
+      <Button variant='contained' sx={{display:(show ?'inline-block':'none')}} fullWidth onClick={handleClickOpen} startIcon = {<Edit fontSize='small'/>}>Edit Profile</Button>
+      <Button onClick={handleClickOpen} sx={{display:(show ?'none':'block')}}>
         <ManageAccounts />
       </Button>
       <Dialog open={open} onClose={handleClose}>

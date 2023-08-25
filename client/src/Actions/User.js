@@ -39,7 +39,7 @@ export const LoadUser = () => async (dispatch) => {
     } catch (error) {
       dispatch({
         type: "LoadUserFailure",
-        payload: error.response,
+        payload: error.response
       });
     }
 }
@@ -170,22 +170,42 @@ export const addRemoveUser = (id) => async(dispatch)=> {
   }
 }
 
-export const getUser = (id) => async(dispatch)=> {
+
+export const RemoveUserFromFollowers = (id) => async (dispatch) => {
   try {
     dispatch({
-      type: "userRequest"
-    })
-    
-    const {data} = await axios.get(`/users/${id}`)
+      type: "removeFollowerRequest",
+    });
 
+    const { data } = await axios.put(`/users/${id}/remove`);
+    
     dispatch({
-      type: "userSuccess",
-      payload: data
-    })
+      type: "removeFollowerSuccess",
+      payload: data,
+    });
   } catch (error) {
     dispatch({
-      type:"userFailure",
-      payload:error.response
-    })    
+      type: "removeFollowerFailure",
+      payload: error.response.data
+    });
+  }
+}
+export const getUserProfile = (id) => async (dispatch) => {
+  try {
+    dispatch({
+      type: "userProfileRequest",
+    });
+
+    const { data } = await axios.get(`/users/${id}`);
+    
+    dispatch({
+      type: "userProfileSuccess",
+      payload: data,
+    });
+  } catch (error) {
+    dispatch({
+      type: "userProfileFailure",
+      payload: error.response
+    });
   }
 }

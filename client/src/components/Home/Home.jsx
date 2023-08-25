@@ -2,7 +2,7 @@ import React, { useEffect } from 'react'
 import UserInfo from '../leftSidebar/UserInfo'
 import FollowUsers from '../leftSidebar/FollowUsers'
 import Notify from '../rightSidebar/Notify'
-import Friend from '../rightSidebar/Friend'
+import Followings from '../rightSidebar/Followings'
 import CreatePost from '../Feed/CreatePost'
 import Feed from '../Feed/Feed'
 import { useDispatch, useSelector } from 'react-redux'
@@ -20,40 +20,42 @@ function Home() {
   }, [dispatch]);
 
   return (
-    <Stack direction={'row'} p={1} gap={2} height={'100%'} className=' bg-violet-100 '>
+    <>
+    <Stack direction={'row'} p={1} gap={2} position={'fixed'} width={'100%'} height={'100%'} className=' bg-violet-100 '>
       <Stack minWidth={"23%"} direction={'column'} m={3} spacing={4}>
         <UserInfo />
         <FollowUsers />
       </Stack>
-      <Box width={"50%"} className=' overflow-hidden overflow-y-auto h-full scrollbar-thin scrollbar-thumb-indigo-500 scrollbar-track-indigo-100'>
+      <Box width={"50%"} pb={4} overflow={'scroll'}>
         <CreatePost />
         {
           feed && feed.length>0 ? (
             feed.map((f)=> (
               <Feed 
-                key={f._id}
-                postId = {f._id}
-                caption = {f.desc}
-                postImage = {f.image}
-                createdAt={f.createdAt}
-                likes = {f.likes}
-                comments = {f.comments}
-                ownerId = {f.userId._id}
-                ownerName = {f.userId.firstName + " "+f.userId.lastName}
-                ownerAvatar = {f.userId.avatar}
-                user={user} 
+              key={f._id}
+              postId = {f._id}
+              caption = {f.desc}
+              postImage = {f.image}
+              createdAt={f.createdAt}
+              likes = {f.likes}
+              comments = {f.comments}
+              ownerId = {f.userId._id}
+              ownerName = {f.userId.firstName + " "+f.userId.lastName}
+              ownerAvatar = {f.userId.avatar}
+              user={user} 
               />
-
-            ))) : (
-              <Typography variant="h6" m={2} align='center'>No posts yet</Typography>
-            )
-        }
+              
+              ))) : (
+                <Typography variant="h6" width={'100%'} m={2} align='center'>No posts yet</Typography>
+                )
+              }
       </Box>
-      <Stack direction={'column'} minWidth={"25%"}>
+      <Stack position={'sticky'} direction={'column'} minWidth={"25%"}>
         <Notify/>
-        <Friend />
+        <Followings />
       </Stack>
     </Stack>
+    </>
   )
 }
 

@@ -29,12 +29,12 @@ export const getPost = async(req,res,next) => {
 // update
 export const updatePost = async(req, res, next) => {
     const id = req.params.id;
-    const {userId} = req.body;
+    const userId = req.user._id;
     try {
         const post = await Post.findById(id);
-        if(userId===post.userId.toString()) {
-            const updatedPost = await Post.findByIdAndUpdate(id, {$set : req.body}, {new:true})
-            res.status(200).json(updatedPost);
+        if(userId.toString()===post.userId.toString()) {
+            await post.updateOne({$set : req.body})
+            res.status(200).json("Successfully updated the post");
         }
         else {
             return next(new ErrorHandler("you can update you own post only", 400));
@@ -76,16 +76,16 @@ export const like = async(req, res, next)=> {
 }
 
 // getLikeUser
-export const getLikeList = async(req,res,next) => {
-    const {id} = req.params
-    try {
-        const post = await Post.findById(id).populate("likes")
+// export const getLikeList = async(req,res,next) => {
+//     const {id} = req.params
+//     try {
+//         const post = await Post.findById(id).populate("likes")
         
-        res.status(200).json(post.likes);
-    } catch (error) {
-        return next(new ErrorHandler(error, 400))
-    }
-}
+//         res.status(200).json(post.likes);
+//     } catch (error) {
+//         return next(new ErrorHandler(error, 400))
+//     }
+// }
 
 
 // add Comment
@@ -112,7 +112,7 @@ export const deleteComment = async(req,res,next) => {
             message: "Post not found",
           });
         }
-    
+        
         // Checking If owner wants to delete
     
         if (post.userId.toString() === req.user._id.toString()) {
@@ -167,7 +167,7 @@ export const deleteComment = async(req,res,next) => {
 
 export const getFeedPost = async(req,res,next)=> {
     try {
-        const post = await Post.find().populate("userId likes comments.user");
+        const post = await Post.find({ userId: { $ne: req.user._id } }).populate("userId likes comments.user");
         res.status(200).json(post.reverse())
     } catch (error) {
         return next(new ErrorHandler(error, 400));
@@ -177,12 +177,26 @@ export const getFeedPost = async(req,res,next)=> {
 export const getUserPost = async(req,res,next) => {
     try {
         const {userId} = req.params
-        const post = await Post.find({userId})
+        const post = await Post.find({userId}).populate("userId likes comments.user")
         res.status(200).json(post)
     } catch (error) {
         return next(new ErrorHandler(error, 400));
     }
 }   
+
+export const deleteUserPosts = async(req,res,next) => {
+    try {
+        const {userId} = req.params
+        const post = await Post.deleteMany({userId})
+        
+        res.status(200).json({
+          success:true,
+          message:`Successfully deleted ${post.deletedCount} posts.`,
+        })
+    } catch (error) {
+        return next(new ErrorHandler(error, 400));
+    }
+}
 
 
 export const getPostOfFollowing = async (req, res) => {
@@ -207,3 +221,13 @@ export const getPostOfFollowing = async (req, res) => {
     }
   };
   
+
+  export const getMyPost = async(req,res, next) => {
+    try {
+        const userId = req.user._id
+        const posts = await Post.find({userId}).populate("userId likes comments.user")
+        res.status(200).json(posts.reverse())
+    } catch (error) {
+        return next(new ErrorHandler(error, 400))
+    }
+  }

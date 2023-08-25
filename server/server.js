@@ -17,7 +17,7 @@ import multer from "multer"
 import { register } from "./controllers/auth.js"
 import { updateUser } from "./controllers/user.js";
 import { createPost } from "./controllers/post.js";
-
+import {updatePost} from './controllers/post.js'
 // configurations
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -49,6 +49,7 @@ const upload = multer({storage});
 app.post('/api/auth/register', upload.single("picture"), register)
 app.put('/api/users/update', isAuth,  upload.single("picture"), updateUser)
 app.post('/api/post/new',isAuth, upload.single("picture"), createPost);
+app.put('/api/post/:id', isAuth, upload.single("picture"), updatePost)
 
 app.use("/api/auth", authRoute)
 app.use("/api/users", isAuth, userRoute)

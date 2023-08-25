@@ -111,3 +111,105 @@ export const removeComment = (id, commentId) => async(dispatch)=> {
     })
   }
 }
+
+export const getMyPost = () => async(dispatch) => {
+  try {
+    dispatch({
+      type:"myPostsRequest"
+    })
+
+    const {data} = await axios.get('/post/my/posts')
+    dispatch({
+      type:"myPostsSuccess",
+      payload: data
+    })
+  } catch (error) {
+    dispatch({
+      type: "myPostsFailure",
+      payload: error.response.data
+    })
+  }
+}
+
+export const clearState = () => (dispatch)=>{
+  try {
+    dispatch({
+      type:"clearStateRequest"
+    })
+    
+    dispatch({
+      type:"clearStateSuccess",
+      payload: null
+    })
+  } catch (error) {
+    dispatch({
+      type: "clearStateFailure",
+      payload: error.response.data
+    })
+  }
+}
+
+
+export const deletePost = (postId) => async(dispatch)=>{
+  try {
+    dispatch({
+      type:"deletePostRequest"
+    })
+
+    const {data} = await axios.delete(`/post/${postId}`)
+
+    dispatch({
+      type:"deletePostSuccess",
+      payload: data
+    })
+  } catch (error) {
+    dispatch({
+      type: "deletePostFailure",
+      payload: error.response.data
+    })
+  }
+}
+
+
+export const updatePost = (postId, formData) => async(dispatch) => {
+  try {
+    dispatch({
+      type:"updatePostRequest"
+    })
+
+    const {data} = await axios.put(`/post/${postId}`, formData, {
+      headers: {
+        "Content-Type": 'multipart/form-data',
+      },
+    })
+    dispatch({
+      type:"updatePostSuccess",
+      payload: data
+    })
+  } catch (error) {
+    dispatch({
+      type: "updatePostFailure",
+      payload: error.response.data
+    })
+  }
+}
+
+
+export const getUserPost = (userId) => async(dispatch) => {
+  try {
+    dispatch({
+      type:"userPostRequest"
+    })
+
+    const {data} = await axios.get(`/post/${userId}`)
+    dispatch({
+      type:"userPostSuccess",
+      payload: data
+    })
+  } catch (error) {
+    dispatch({
+      type: "userPostFailure",
+      payload: error.response
+    })
+  }
+}

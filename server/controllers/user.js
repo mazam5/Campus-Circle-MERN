@@ -67,8 +67,9 @@ export const updateUser = async(req,res,next) => {
 // delete
 export const deleteUser = async(req,res,next)=> {
     const id = req.params.id;
+    const admin = req.user.admin
     try {  
-        if(req.body.currentUserId === id || admin) {
+        if(req.user._id.toString() === id.toString() || admin) {
             await User.findByIdAndDelete(id);
             res.status(200).json("user deleted successfully");
         }
@@ -76,7 +77,7 @@ export const deleteUser = async(req,res,next)=> {
             return next(new ErrorHandler("Access Denied! You can delete only your account", 400))
         }
     } catch (error) {
-        return next(new ErrorHandler(err, 404));
+        return next(new ErrorHandler(error, 404));
     }
 }
 
@@ -171,3 +172,24 @@ export const getUnfollowedFollowers = async (req, res, next) => {
     }
   };
   
+
+export const remove = async(req,res,next) => {
+    const id = req.params.id;
+    try {
+        const friendUser = await User.findById(id);
+        const indexToRemove1 = req.user.followers.indexOf(id);
+        const indexToRemove2 = friendUser.following.indexOf(req.user._id);
+        
+        if (indexToRemove1 === -1 || indexToRemove2 === -1) {
+            return next(new ErrorHandler("User is not in the follow list", 404));
+        }
+        
+        req.user.followers.splice(indexToRemove1, 1);
+        friendUser.following.splice(indexToRemove2, 1);
+        await req.user.save();
+        await friendUser.save()
+        res.status(200).json("Removed user")
+    } catch (error) {
+        return next(new ErrorHandler(error, 500));        
+    }
+} 
