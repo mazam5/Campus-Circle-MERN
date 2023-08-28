@@ -178,7 +178,7 @@ export const getUserPost = async(req,res,next) => {
     try {
         const {userId} = req.params
         const post = await Post.find({userId}).populate("userId likes comments.user")
-        res.status(200).json(post)
+        res.status(200).json(post.reverse())
     } catch (error) {
         return next(new ErrorHandler(error, 400));
     }

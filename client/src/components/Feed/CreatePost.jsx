@@ -11,6 +11,7 @@ import { AttachFile, Edit, EmojiEmotions, VideoCameraBack } from '@mui/icons-mat
 import data from '@emoji-mart/data'
 import Picker from '@emoji-mart/react'
 import { Link } from 'react-router-dom';
+import './post.css'
 
 const CreatePost = ({isAccount = false}) => {
   const [desc, setDesc] = useState("")
@@ -87,8 +88,8 @@ const CreatePost = ({isAccount = false}) => {
         <Link to={`/user/${user._id}`}>
           <UserImage image={user.avatar} firstName={user.firstName} />
         </Link>
-        <Box onClick={handleClickOpen} width={'100%'}>
-          <textarea type="text" placeholder="What's on you mind?" className='px-3 outline-none bg-white rounded-full w-full' disabled/>
+        <Box onClick={handleClickOpen} display={'flex'} alignItems={'center'} width={'100%'}>
+          <textarea onClick={handleClickOpen} type="text" placeholder={`What's on you mind? ${user.firstName}.`} readOnly className='px-3 resize-none placeholder-center outline-none bg-white rounded-full w-full'/>
         </Box>
       </Stack>
       <Divider variant="middle" className='dark:bg-gray-800'/>

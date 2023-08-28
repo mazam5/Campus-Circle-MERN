@@ -1,0 +1,3 @@
+.placeholder-center::placeholder {
+    transform: translateY(50%);
+  }
