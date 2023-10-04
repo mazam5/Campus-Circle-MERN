@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import UserInfo from '../leftSidebar/UserInfo'
 import FollowUsers from '../leftSidebar/FollowUsers'
-import Notify from '../rightSidebar/Notify'
+// import Notify from '../rightSidebar/Notify'
 import Followings from '../rightSidebar/Followings'
 import CreatePost from '../Feed/CreatePost'
 import Feed from '../Feed/Feed'
@@ -21,12 +21,12 @@ function Home() {
 
   return (
     <>
-    <Stack direction={'row'} p={1} gap={2} position={'fixed'} width={'100%'} height={'100%'} className=' bg-violet-100 '>
-      <Stack minWidth={"23%"} direction={'column'} m={3} spacing={4}>
+    <Stack direction={'row'} bgcolor={"background.default"} color={"text.primary"} spacing={1} justifyContent={'space-between'} position={'fixed'} width={'100%'} height={'100%'} >
+      <Stack position={'sticky'} direction={'column'} sx={{display:{xs:'none', sm:'block'}, flex:{sm: 0.2, md:0.5, lg:2}}} p={2} m={1} spacing={4}>
         <UserInfo />
         <FollowUsers />
       </Stack>
-      <Box width={"50%"} pb={4} overflow={'scroll'}>
+      <Box sx={{flex:{sm:4, md:4}}} pt={2} pb={5} overflow={'scroll'} >
         <CreatePost />
         {
           feed && feed.length>0 ? (
@@ -50,8 +50,7 @@ function Home() {
                 )
               }
       </Box>
-      <Stack position={'sticky'} direction={'column'} minWidth={"25%"}>
-        <Notify/>
+      <Stack p={2} position={'sticky'} sx={{display:{xs:'none', md:'block'}, flex:{sm:1, md:1, lg:2}}} direction={'column'} >
         <Followings />
       </Stack>
     </Stack>

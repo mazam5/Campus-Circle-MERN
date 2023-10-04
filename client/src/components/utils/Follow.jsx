@@ -31,7 +31,7 @@ const Follow = ({isUser, avatar, firstName, lastName, id}) => {
   return (
     <>
     {isUser ? (
-      <Stack direction={'row'} spacing={2} m={2} alignItems={'center'} >
+      <Stack direction={'row'} spacing={2} m={2} my={1} alignItems={'center'} >
       <UserImage image = {avatar} firstName = {firstName} />
       <Box width={'100%'}>
         <Link to={`/user/${id}`}>

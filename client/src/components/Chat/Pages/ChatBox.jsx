@@ -96,9 +96,9 @@ const ChatBox = ({chat, currentUserId, setSendMessage, receiveMessage}) => {
             <Divider variant="middle" className='dark:bg-gray-200'/>
             {/* messages */}
             <Stack direction={'column'} justifyContent={'space-between'} mt={1} height={'85%'}>
-                <Box className='flex flex-col overflow-scroll gap-1'>
+                <Box  className='flex flex-col overflow-scroll gap-1'>
                     {messages && messages.map((message)=> (
-                        <Box ref ={scroll} key={message._id} p={1} maxWidth={'28rem'} className={ message.senderId===currentUserId ? 'bg-blue-300':'bg-white'} sx={{mx:'1rem', borderRadius:'10px', width:'fit-content', alignSelf:message.senderId===currentUserId? 'flex-end':'auto'}}>
+                        <Box ref ={scroll} key={message._id} p={1} maxWidth={'28rem'} flexWrap={'wrap'} className={ message.senderId===currentUserId ? 'bg-blue-300':'bg-white'} sx={{mx:'1rem', borderRadius:'10px', alignSelf:message.senderId===currentUserId? 'flex-end':'auto', wordWrap: 'break-word'}}>
                             <Typography fontSize={'1.2rem'}>{message.text}</Typography>
                             <Typography variant='p'>{format(message.createdAt)}</Typography>
                         </Box>

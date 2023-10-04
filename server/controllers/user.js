@@ -20,6 +20,29 @@ export const getUser = async (req, res, next)=> {
     }
 }   
 
+// search users
+export const searchUser = async (req, res, next)=> {
+    const {search} = req.query
+    try {
+        let user;
+        console.log(search)
+        if(search) {
+            user = await User.find({
+                $or: [
+                   {firstName: { $regex: search, $options: "i" } },
+                  { lastName: { $regex: search, $options: "i" } },
+                ],
+            }).lean();
+        }
+        else {
+            user = await User.find();
+        }
+        res.status(200).json(user);
+    } catch (error) {
+        return next(new ErrorHandler(error, 400))
+    }
+}   
+
 // my profile
 export const myProfile = async(req,res,next) => {
     
@@ -39,7 +62,6 @@ export const myProfile = async(req,res,next) => {
         return next(new ErrorHandler(error, 400))
     }
 }
-
 
 // update user
 export const updateUser = async(req,res,next) => {
@@ -108,32 +130,6 @@ export const follow = async(req, res, next) => {
     }
 
 }
-// unfollow a user
-// export const unfollow = async(req, res, next) => {
-//     const id = req.params.id;
-//     const {currentUserId} = req.body;
-//     try {
-//         if(id !== currentUserId) {
-//             const currentUser = await User.findById(currentUserId);
-//             const unfollowUser = await User.findById(id);
-    
-//             if(unfollowUser.followers.includes(currentUserId)) {
-//                 await currentUser.updateOne({$pull : {following : id}});
-//                 await unfollowUser.updateOne({$pull : {followers : currentUserId}});
-//                 res.status(200).json("unfollowed the user!");
-//             }
-//             else {
-//                 return next(new ErrorHandler("you donot follow this account to unfollow",403));
-//             }
-//         }
-//         else {
-//             return next(new ErrorHandler("You cannot unfollow yourself", 403));
-//         }
-        
-//     } catch (error) {
-//         return next(new ErrorHandler(error, 403));
-//     }
-// }
 
 export const getUserFriends = async (req, res, next) => {
     try {
@@ -193,3 +189,25 @@ export const remove = async(req,res,next) => {
         return next(new ErrorHandler(error, 500));        
     }
 } 
+
+// follow suggestion
+export const getSuggestedUsers = async (req, res, next) => {
+  try {
+    const id = req.user? req.user._id : null;
+
+    const user = await User.findById(id);
+
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    // Query for suggested users to follow
+    const suggestedUsers = await User.find({
+      _id: { $ne: user._id }, // Exclude the logged-in user
+      followers: { $not: { $elemMatch: { $eq: id } } }, // Exclude users the logged-in user is already following
+    }).limit(4); // Limit the number of suggested users
+    res.status(200).json(suggestedUsers);
+  } catch (error) {
+    return next(new ErrorHandler(error, 500))
+  }
+};

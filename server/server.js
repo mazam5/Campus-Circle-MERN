@@ -16,8 +16,8 @@ import { isAuth } from "./middlewares/auth.js"
 import multer from "multer"
 import { register } from "./controllers/auth.js"
 import { updateUser } from "./controllers/user.js";
-import { createPost } from "./controllers/post.js";
-import {updatePost} from './controllers/post.js'
+import { createPost, updatePost } from "./controllers/post.js";
+import { createBlog, updateBlog } from "./controllers/blog.js";
 // configurations
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -50,6 +50,8 @@ app.post('/api/auth/register', upload.single("picture"), register)
 app.put('/api/users/update', isAuth,  upload.single("picture"), updateUser)
 app.post('/api/post/new',isAuth, upload.single("picture"), createPost);
 app.put('/api/post/:id', isAuth, upload.single("picture"), updatePost)
+app.post('/api/blog/new',isAuth, upload.single("picture"), createBlog);
+app.put('/api/blog/:id', isAuth, upload.single("picture"), updateBlog)
 
 app.use("/api/auth", authRoute)
 app.use("/api/users", isAuth, userRoute)

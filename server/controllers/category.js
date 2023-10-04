@@ -15,7 +15,16 @@ export const createCatergory = async(req,res,next) => {
 // get
 export const getCategory = async(req,res,next) => {
     try {
-        const category = await Category.find()
+        const cat = req.query.category;
+        let category;
+        if(cat) {
+            category = await Category.find(
+                {name: {$regex: cat, $options:'i'}}
+            )
+        }
+        else {
+            category = await Category.find()
+        }
         res.status(200).json(category)
     } catch (error) {
         return next(new ErrorHandler(error, 400))

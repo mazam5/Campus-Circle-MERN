@@ -128,6 +128,26 @@ export const getFriends = () => async(dispatch)=> {
   }
 }
 
+
+export const searchUser = (q) => async(dispatch)=> {
+  try {
+    dispatch({
+      type:"findUserRequest"
+    })
+    const {data} = await axios.get(`/users?search=${q}`);
+    dispatch({
+      type: "findUserSuccess",
+      payload:data
+    })
+    
+  } catch (error) {
+    dispatch({
+      type: "findUserFailure",
+      payload:error.response
+    })
+  }
+}
+
 export const toFollow = () => async(dispatch)=> {
   try {
     dispatch({
@@ -208,4 +228,26 @@ export const getUserProfile = (id) => async (dispatch) => {
       payload: error.response
     });
   }
+}
+
+
+export const getSuggFollow = () => async(dispatch) => {
+  try {
+    dispatch({
+      type: "SuggestedFollowRequest"
+    })
+    
+    const {data} = await axios.get('/users/follow/suggestions')
+
+    dispatch({
+      type: "SuggestedFollowSuccess",
+      payload: data
+    })
+  } catch (error) {
+    dispatch({
+      type:"SuggestedFollowFailure",
+      payload:error.response
+    })    
+  }
+
 }

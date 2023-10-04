@@ -31,7 +31,7 @@ const Followings = ({isUser = false}) => {
     </Stack>
     <Modal open={open} onClose={handleClose}>
         
-    <Box m={3} maxHeight={'220px'} sx={{ position: 'absolute', top: '50%', left: '50%', outline:'none', border:'none', transform: 'translate(-50%, -50%)', width: 600, height: 300, bgcolor: 'background.paper', boxShadow: 24, p: 2 }} >
+    <Box m={3} maxHeight={'220px'} sx={{ position: 'absolute', top: '50%', left: '50%', outline:'none', border:'none', transform: 'translate(-50%, -50%)', width: 450, height: 300, bgcolor: 'background.paper', boxShadow: 24, p: 2 }} >
         <Typography variant='h5'>Following</Typography>
         <Box sx={{ maxHeight: '180px', overflowY: 'scroll' }}>
         {following && following.length>0 ? (following.map((f)=> (

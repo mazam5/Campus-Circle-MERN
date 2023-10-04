@@ -75,19 +75,6 @@ export const like = async(req, res, next)=> {
     }
 }
 
-// getLikeUser
-// export const getLikeList = async(req,res,next) => {
-//     const {id} = req.params
-//     try {
-//         const post = await Post.findById(id).populate("likes")
-        
-//         res.status(200).json(post.likes);
-//     } catch (error) {
-//         return next(new ErrorHandler(error, 400))
-//     }
-// }
-
-
 // add Comment
 export const comment = async(req,res,next) => {
     const id = req.params.id;

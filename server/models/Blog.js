@@ -1,7 +1,10 @@
 import mongoose from "mongoose"
 
 const blogSchema = new mongoose.Schema({
-    userId: String,
+    userId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
+    },
     title:{
         type:String,
         required:true,
@@ -11,31 +14,54 @@ const blogSchema = new mongoose.Schema({
         type:String,
         required:true
     },
-    coding: {
-        type: Array
-    },
-    hr: {
-        type: Array
-    },
-    tr:{
-        type: Array
-    },
-    puzzles:{
-        type: Array
-    },
-    prepSuggestions:String,
     photo:{
-        type:String,
-        required:true
+        type:String
+    },
+    likedBy:[{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User"
+    }],
+    comments: [{
+        user:{
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "User",
+        },
+        comment:{
+            type:String,
+            required:true
+        }
+    }],
+    views: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User"
+    }],
+    readingTime:{
+        type:Number,
     },
     category: {
         type:Array,
-        required:false
+        required:true
     }
 },
     {timestamps:true}
 );
 
-const blog = mongoose.model("blog", blogSchema)
+function calculateReadingTime(content) {
+
+    const wordsPerMinute = 505; 
+  
+    const wordCount = content.split(/\s+/).length;
+  
+    const readingTimeMinutes = Math.ceil(wordCount / wordsPerMinute);
+  
+    return readingTimeMinutes;
+  }
+
+  blogSchema.pre('save', function (next) {
+    this.readingTime = calculateReadingTime(this.content);
+    next();
+  });
+
+const blog = mongoose.model("Blog", blogSchema)
 
 export default blog

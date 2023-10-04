@@ -1,0 +1,10 @@
+/* Hide horizontal scrollbar for WebKit browsers (Chrome, Safari) */
+::-webkit-scrollbar {
+    display: none;
+  }
+  
+  /* Hide horizontal scrollbar for Firefox */
+  /* Note: Firefox uses a different method to style scrollbars */
+  * {
+    scrollbar-width: none;
+  }

@@ -146,6 +146,30 @@ export const userReducer = createReducer(initialState, (builder) => {
       state.error = action.payload;
       state.isAuthenticated = false;
     })
+
+    .addCase("SuggestedFollowRequest", (state) => {
+      state.loading = true;
+    })
+    .addCase("SuggestedFollowSuccess", (state, action) => {
+      state.loading = false;
+      state.suggFollow = action.payload;
+    })
+    .addCase("SuggestedFollowFailure", (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+    })
+
+    .addCase("findUserRequest", (state, action)=> {
+      state.loading = true;
+    })
+    .addCase("findUserSuccess", (state, action)=> {
+      state.loading = false;
+      state.usersFound = action.payload;
+    })
+    .addCase("findUserFailure", (state, action)=> {
+      state.loading = false;
+      state.error = action.payload;
+    })
   });
   
 

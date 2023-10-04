@@ -90,10 +90,10 @@ const Feed = ({
 
   return (
     <>
-    <Card sx={{bgcolor:'lightgrey', m:'2rem'}} >
+    <Card sx={{m:{xs:'1rem', md:'10px', lg:'2rem'}}} >
       <Friend isUser={isUser} ownerAvatar={ownerAvatar} postId = {postId} caption={caption} postImage = {postImage} createdAt = {createdAt} friendId={ownerId} ownerName={ownerName} />
 
-      <Divider variant="middle" className='dark:bg-gray-300'/>
+      <Divider variant="middle" className='dark:bg-gray-100'/>
       <Box p={1} >
         <Typography variant='p'>{caption}</Typography>
       </Box>
@@ -105,7 +105,7 @@ const Feed = ({
         <Button onClick={handleClickOpen} variant='h6'>{likes.length} likes</Button>
         <Button onClick={handleOpenComment} variant='h6'>{comments.length} comments</Button>
       </Stack>
-      <Divider variant="middle" className='dark:bg-gray-300'/>
+      <Divider variant="middle" className='dark:bg-gray-100'/>
       <Stack p={2} justifyContent={'space-around'} direction={'row'} >
           <Button onClick={()=>handleLike(postId)} >{liked ? <Favorite color='error'/> : <FavoriteBorder/>}</Button>
           <Button onClick={()=> SetOpenComment(!openComment)} >{openComment ? <CommentOutlined /> : <Comment /> }</Button>
@@ -125,14 +125,14 @@ const Feed = ({
         <Button onClick={AddComment}><Send/></Button>
       </Stack>
           <Modal open={open} onClose={handleClose}>
-            <Box sx={{ position: 'absolute', top: '50%', left: '50%', outline:'none', border:'none', transform: 'translate(-50%, -50%)', width: 600, height: 300, bgcolor: 'background.paper', boxShadow: 24, p: 2 }}>
+            <Box sx={{ position: 'absolute', top: '50%', left: '50%', outline:'none', border:'none', transform: 'translate(-50%, -50%)', width: {xs: 300, sm:600}, height: 300, bgcolor: 'background.paper', boxShadow: 24, p: {xs:1, sm:2} }}>
 
               <Typography variant='h5' align='center' color={'gray'} m={1}>Likes</Typography>
               <Divider variant="middle" className='dark:bg-gray-300'/>
 
               <Box sx={{ maxHeight: '220px', overflowY: 'scroll' }}>
               { likes && likes.length>0 ? likes.map((l) =>(
-                  <Container m={3} key={me._id}>
+                  <Container sx={{mt:1}} key={me._id}>
                     <Like key={me._id} ownerAvatar={l.avatar} ownerName={l.firstName +" "+ l.lastName} friendId={l._id} />
                   </Container> 
                   )):(
@@ -143,13 +143,13 @@ const Feed = ({
             </Box>
           </Modal>
           <Modal open={commentToggle} onClose={handleCloseComment}>
-            <Box sx={{ position: 'absolute', top: '50%', left: '50%', outline:'none', border:'none', transform: 'translate(-50%, -50%)', width: 600, height: 300, bgcolor: 'background.paper', boxShadow: 24, p: 2 }}>
+            <Box sx={{ position: 'absolute', top: '50%', left: '50%', outline:'none', border:'none', transform: 'translate(-50%, -50%)', width: {xs: 300, sm:600}, height: 300, bgcolor: 'background.paper', boxShadow: 24, p: 2 }}>
 
               <Typography variant='h5' align='center' color={'gray'} m={1}>Comments</Typography>
               <Divider variant="middle" className='dark:bg-gray-300'/>
               <Box sx={{ maxHeight: '220px', overflowY: 'scroll' }}>
               { comments && comments.length>0 ? comments.map((comment) =>(
-                  <Container m={3} key={comment._id} overflow={'hidden'} >
+                  <Container sx={{margin:{xs:0, md:3}, marginTop:{xs:2}}} key={comment._id} overflow={'hidden'} >
                     <CommentComp isUser={isUser} key={comment._id} isAccount={isAccount} userId = {comment.user._id} id ={user._id} image = {comment.user.avatar} postId = {postId} commentId = {comment._id} firstName ={comment.user.firstName} name = {comment.user.firstName+ " "+comment.user.lastName} comment= {comment.comment} />
                   </Container>
                   )):(

@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react'
-import { Box, Divider, Modal, Stack, Card, Typography, Button, TextField} from '@mui/material'
+import { Box, Divider, Modal, Stack, Card, Typography, Button, TextField, Paper} from '@mui/material'
 import AddAPhotoIcon from '@mui/icons-material/AddAPhoto';
 import DuoIcon from '@mui/icons-material/Duo';
 import ArticleIcon from '@mui/icons-material/Article';
@@ -20,7 +20,7 @@ const CreatePost = ({isAccount = false}) => {
   const dispatch = useDispatch()
   const {user} = useSelector((state)=> state.user)
   const [open, setOpen] = React.useState(false);
-  const [profile, setProfile] = React.useState(false);
+  const [profile, setProfile] = React.useState('');
 
   const inputFileRef = useRef(null);
 
@@ -83,7 +83,7 @@ const CreatePost = ({isAccount = false}) => {
   }
 
   return (
-    <Box m={3} mt={1} className='bg-slate-200'>
+    <Paper m={3} mt={1} >
       <Stack direction={'row'} p={2} gap={2} alignItems={'center'} >
         <Link to={`/user/${user._id}`}>
           <UserImage image={user.avatar} firstName={user.firstName} />
@@ -92,11 +92,13 @@ const CreatePost = ({isAccount = false}) => {
           <textarea onClick={handleClickOpen} type="text" placeholder={`What's on you mind? ${user.firstName}.`} readOnly className='px-3 resize-none placeholder-center outline-none bg-white rounded-full w-full'/>
         </Box>
       </Stack>
-      <Divider variant="middle" className='dark:bg-gray-800'/>
+      <Divider variant="middle" className='dark:bg-gray-200'/>
       <Stack direction={'row'} p={1} justifyContent={'space-around'} alignItems={'center'}>
         <Button onClick={handleClickOpen} startIcon={<AddAPhotoIcon/>}>Photo</Button>
         <Button onClick={handleClickOpen} startIcon={<DuoIcon/>}>Video</Button>
-        <Button onClick={handleClickOpen} startIcon={<ArticleIcon/>}>Blog</Button>
+        <Link to={'/blog/write'}>
+          <Button startIcon={<ArticleIcon/>}>Blog</Button>
+        </Link>
       </Stack>
 
       
@@ -140,7 +142,7 @@ const CreatePost = ({isAccount = false}) => {
         </Button>
       </Box>
     </Modal>
-    </Box>
+    </Paper>
   )
 }
 

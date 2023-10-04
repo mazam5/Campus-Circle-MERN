@@ -7,7 +7,7 @@ import DialogTitle from "@mui/material/DialogTitle";
 import { Edit, ManageAccounts } from "@mui/icons-material";
 import { useDispatch, useSelector } from "react-redux";
 import { styled } from "@mui/material/styles";
-import { Avatar, Box, Grid } from "@mui/material";
+import { Avatar, Box, Grid, IconButton } from "@mui/material";
 import { updateUser } from "../../Actions/User";
 import '../css/external.css'
 
@@ -95,9 +95,9 @@ const UserModal = ({show = false}) => {
   return (
     <Box>
       <Button variant='contained' sx={{display:(show ?'inline-block':'none')}} fullWidth onClick={handleClickOpen} startIcon = {<Edit fontSize='small'/>}>Edit Profile</Button>
-      <Button onClick={handleClickOpen} sx={{display:(show ?'none':'block')}}>
-        <ManageAccounts />
-      </Button>
+      <IconButton onClick={handleClickOpen} sx={{color:'black',display:(show ?'none':'block')}}>
+        <ManageAccounts fontSize="large"/>
+      </IconButton>
       <Dialog open={open} onClose={handleClose}>
         <DialogTitle>
           Edit Profile <Edit />

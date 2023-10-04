@@ -40,11 +40,11 @@ const Following = ({isUser, avatar, firstName, lastName, id }) => {
       </Box>
       {id !== user._id ? (
           isFriend ? (
-            <Button variant='text' size='small' color='info' onClick={() => setOpen(!open)}>
+            <Button variant='contained' sx={{backgroundColor:'green', color:'white', ":hover": {backgroundColor:'white', color:'black'}}} size='small' color='info' onClick={() => setOpen(!open)}>
               Following
             </Button>
           ) : (
-            <Button variant='text' size='small' color='info' onClick={handleFollow}>
+            <Button variant='contained' size='small' sx={{backgroundColor:'green', color:'white', ":hover": {backgroundColor:'white', color:'black'}}} color='info' onClick={handleFollow}>
               Follow
             </Button>
           )
@@ -65,14 +65,14 @@ const Following = ({isUser, avatar, firstName, lastName, id }) => {
           </Modal>
         </Stack>
       ):(
-    <Stack direction={'row'} spacing={2} m={2} alignItems={'center'}>
+          <Stack direction={'row'} spacing={2} m={1} mb={2} alignItems={'center'}>
               <UserImage image = {avatar} firstName = {firstName} />
-              <Box width={'100%'}>
+              <Box width={'50%'}>
                 <Link to={`/user/${id}`}>
                   <Typography variant='h6' sx={{width:'100%'}}>{firstName} {lastName}</Typography>
                 </Link>
               </Box>
-              <Button variant='text' size='small' color='info' onClick={() => setOpen(!open)}>Following</Button>
+              <Button variant='contained' size='small' color='info' sx={{backgroundColor:'green', color:'white', ":hover": {backgroundColor:'white', color:'black'}}} onClick={() => setOpen(!open)}>Following</Button>
 
               <Modal open={open} onClose={handleClose}>
               <Box sx={{ position: 'absolute', top: '50%', left: '50%', outline:'none', border:'none', transform: 'translate(-50%, -50%)', width: 600, height: 300, bgcolor: 'background.paper', boxShadow: 24, p: 2 }}>
