@@ -5,8 +5,11 @@ import FollowUser from '../../leftSidebar/FollowUser';
 import { getSuggFollow } from '../../../Actions/User';
 import { getBlogs, getPopularBlogs, getSavedBlogs } from '../../../Actions/Blog';
 import Story from '../Home/Story';
+import {useMediaQuery} from '@mui/material';
 
 const Suggestions = () => {
+  const isTabScreen = useMediaQuery('(max-width:670px)');
+  const isSmallScreen = useMediaQuery('(max-width:428px)');
     const [text, setText] = useState('popular')
     const dispatch = useDispatch();
 
@@ -23,8 +26,8 @@ const Suggestions = () => {
     const {popularBlog} = useSelector((state)=>state.blog)
 
   return (
-    <Box m={10} width={'50%'}>
-        <Typography sx={{fontWeight:600}} variant='h3'>Refine recommendations</Typography>
+    <Box m={{xs:2, md:10}} width={{xs:'90%', sm:'80%', md:'60%' ,lg:'50%'}}>
+        <Typography sx={{fontWeight:{xs:500, md:600}}} variant={isSmallScreen? 'h5': isTabScreen?'h4':'h3'}>Refine recommendations</Typography>
         <Stack mt={4} direction={'row'}>
             <Button onClick={()=>setText("popular")} variant='text'>Popular</Button>
             <Button onClick={()=>setText("saved")} variant='text'>Saved</Button>

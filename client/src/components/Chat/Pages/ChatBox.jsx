@@ -12,7 +12,6 @@ const ChatBox = ({chat, currentUserId, setSendMessage, receiveMessage}) => {
     const [newMessage, setNewMessage] = useState("")
     const scroll = useRef()
     
-
     useEffect(()=> {
         const userId = chat?.members?.find((id)=> id !== currentUserId)
         const getUserData = async() => {
@@ -98,14 +97,14 @@ const ChatBox = ({chat, currentUserId, setSendMessage, receiveMessage}) => {
             <Stack direction={'column'} justifyContent={'space-between'} mt={1} height={'85%'}>
                 <Box  className='flex flex-col overflow-scroll gap-1'>
                     {messages && messages.map((message)=> (
-                        <Box ref ={scroll} key={message._id} p={1} maxWidth={'28rem'} flexWrap={'wrap'} className={ message.senderId===currentUserId ? 'bg-blue-300':'bg-white'} sx={{mx:'1rem', borderRadius:'10px', alignSelf:message.senderId===currentUserId? 'flex-end':'auto', wordWrap: 'break-word'}}>
+                        <Box ref ={scroll} key={message._id} p={1} maxWidth={{xs:'10rem', sm:'18rem', md:'28rem'}} flexWrap={'wrap'} className={message.senderId===currentUserId ? 'bg-blue-300':'bg-white'} sx={{mx:'1rem', borderRadius:'10px', alignSelf:message.senderId===currentUserId? 'flex-end':'flex-start', wordWrap: 'break-word'}}>
                             <Typography fontSize={'1.2rem'}>{message.text}</Typography>
                             <Typography variant='p'>{format(message.createdAt)}</Typography>
                         </Box>
                     ))}
                 </Box>
                 {/* message Sender */}
-                <Stack direction={'row'} alignItems={'center'} m={1}>
+                <Stack direction={'row'} alignItems={'center'} ml={{xs:2, md:1}}>
                     <TextField
                         sx={{backgroundColor:'white'}}
                         multiline
@@ -121,8 +120,8 @@ const ChatBox = ({chat, currentUserId, setSendMessage, receiveMessage}) => {
                         size='small'  
                     />
 
-                    <Button><EmojiEmotions fontSize='medium'/></Button>
-                    <Button><AttachFile fontSize='medium'/></Button>
+                    <Button sx={{display:{xs:'none',sm:'block'}}}><EmojiEmotions fontSize='medium'/></Button>
+                    <Button sx={{display:{xs:'none',sm:'block'}}}><AttachFile fontSize='medium'/></Button>
                     <Button disabled={newMessage === ''} onClick={handleSend}><SendRounded fontSize='medium'/></Button>
                 </Stack>
             </Stack>

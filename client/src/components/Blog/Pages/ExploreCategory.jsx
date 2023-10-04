@@ -22,11 +22,16 @@ const Search = styled('div')(({ theme }) => ({
     color:'black',
     marginLeft: 0,
     borderRadius: '50px',
-    width: '100%',
+    width: '90%',
     [theme.breakpoints.up('sm')]: {
       marginLeft: theme.spacing(1),
-      width: '40%',
+      width: '55ch',
     },
+    [theme.breakpoints.down('sm')]: {
+      marginLeft: theme.spacing(1),
+      width: '35ch',
+    },
+
   }));
   
   const SearchIconWrapper = styled('div')(({ theme }) => ({
@@ -48,8 +53,11 @@ const Search = styled('div')(({ theme }) => ({
       transition: theme.transitions.create('width'),
       width: '100%',
       [theme.breakpoints.up('sm')]: {
-        width: '55ch',
+        width: '40ch',
       },
+      // [theme.breakpoints.down('sm')]: {
+      //   width: '20ch',
+      // },
     },
   }));
 
@@ -114,14 +122,14 @@ const ExploreCategory = () => {
   return (
     <>
     <Box mt={'3rem'} display={'flex'} justifyContent={'center'}>
-        <Box sx={{width:'70%', justifyContent:'center', display:'flex', flexDirection:'row'}}>
+        <Box sx={{width:{xs:'100%',md:'70%'}, justifyContent:'center', display:'flex', flexDirection:'row'}}>
           <IconButton sx={{":hover": {backgroundColor:'white'}}} style={{ display: showLeftArrow ? 'block' : 'none' }} onClick={() => handleScroll('left')}>
             <ArrowBackIosNewRoundedIcon />
           </IconButton>
           <Stack gap={2} p={3} ref={scrollContainerRef} direction={'row'} sx={{overflowX:'scroll',borderRadius:'40px'}}>
             
 
-            <Fab variant='extended' sx={{minWidth:'18%'}} size='string' >
+            <Fab variant='extended' sx={{minWidth:'7rem'}} size='string' >
               <ExploreRoundedIcon />
               Explore topic
             </Fab>

@@ -50,7 +50,8 @@ function Blog() {
   return (
     <>
     <Stack direction={'row'} sx={{m:{xs:'1rem', sm:'2rem'}}} gap={{xs:0, sm:2}}>
-      <Box sx={{width:{xs:'100%', md:'70%'}}} >
+      
+      <Box sx={{width:{xs:'90%', md:'70%'}}} >
         <Stack direction={'row'} px={2} gap={{xs:1, sm:2}}>
           <Button onClick={()=> setFollowingBlogs(false)}>
             <Typography variant = 'p'>For you</Typography>
@@ -162,7 +163,7 @@ function Blog() {
           </Link>
         </Stack>
       </Box>
-      <Sidebar/>
+      <Sidebar style={{top:"40px",}}/>
     </Stack>
     </>
   )

@@ -3,22 +3,14 @@ import { styled, useTheme } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import {WhatshotRounded, GroupRounded, EditNoteRounded, BookRounded, CategoryRounded} from '@mui/icons-material';
 import MuiDrawer from '@mui/material/Drawer';
-import MuiAppBar from '@mui/material/AppBar';
-import Toolbar from '@mui/material/Toolbar';
 import List from '@mui/material/List';
-import CssBaseline from '@mui/material/CssBaseline';
-import Typography from '@mui/material/Typography';
 import Divider from '@mui/material/Divider';
-import IconButton from '@mui/material/IconButton';
-import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
-import InboxIcon from '@mui/icons-material/MoveToInbox';
-import MailIcon from '@mui/icons-material/Mail';
 import { Link } from 'react-router-dom';
 
 const drawerWidth = 240;
@@ -77,6 +69,7 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
     flexShrink: 0,
     whiteSpace: 'nowrap',
     position:'absolute',
+    top:'15%',
     boxSizing: 'border-box',
     ...(open && {
       ...openedMixin(theme),
@@ -102,9 +95,27 @@ export default function MiniDrawer() {
   };
 
   return (
-    <Box sx={{ display: {xs:'flex', md:'block'}}}>
-      <Drawer anchor="right" variant="permanent" onMouseEnter={handleDrawerOpen} onMouseLeave={handleDrawerClose} open={open}>
-        <List sx={{}}>
+    <Box sx={{ display: {xs:'flex', md:'none'}}}>
+      <Drawer anchor="right" variant="permanent"  open={open}>
+        <List sx={{position:'absolute', top:'10%'}}>
+        <DrawerHeader>
+          <ListItem disablePadding>
+          {open ? (
+                <ListItemButton sx={{minHeight: 48, justifyContent:'initial', px: 1, my:0.7}} onClick={handleDrawerClose}>
+                  <ListItemIcon sx={{minWidth: 0, mr: 3, justifyContent: 'center'}}>
+                    {theme.direction === 'rtl' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
+                  </ListItemIcon>
+                </ListItemButton>
+            ) : (
+                <ListItemButton sx={{minHeight: 48,justifyContent: 'center',px: 1, my:0.7}} onClick={handleDrawerOpen}>
+                  <ListItemIcon sx={{minWidth: 0,mr: 'auto',justifyContent: 'center'}}>
+                    {theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon />}
+                  </ListItemIcon>
+                </ListItemButton>
+            )}
+          </ListItem>
+        </DrawerHeader>
+        <Divider />
           <Link to={'/blog/write'}>
             <ListItem disablePadding sx={{ display: 'block' }}>
               <ListItemButton

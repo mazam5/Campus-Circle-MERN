@@ -89,12 +89,12 @@ const Write = ({placeholder="Share your thoughts here..."}) => {
     
 
   return (
-    <Box sx={{px:'10rem'}} pt={5}>
+    <Box sx={{px:{xs:'1rem', sm:'3rem', md:'10rem'}}} pt={5}>
       {file && 
         <img className='h-[300px] w-[90%] mx-auto rounded-2xl object-cover' src={URL.createObjectURL(file)}/>
       }
       <form onSubmit={handleSubmit}>
-        <Stack direction={'column'} className='h-[100vh]' gap={2} p={3}>
+        <Stack direction={'column'} className='h-[100vh]' gap={2} p={0}>
           <Stack direction={'row'} gap={1} alignItems={'center'}>
             <label htmlFor="fileInput" >
               <AddCircleOutline fontSize='large' sx={{color:'darkgray', fontSize:'40px', cursor:'pointer'}} />

@@ -6,6 +6,7 @@ import Conversation from './Pages/Conversation'
 import ForumIcon from '@mui/icons-material/Forum';
 import ChatBox from './Pages/ChatBox'
 import {io} from 'socket.io-client'
+import DrawerConversations from './Pages/DrawerConversations'
 
 function Chat() {
   const {user} = useSelector((state)=>state.user)
@@ -58,26 +59,31 @@ function Chat() {
   }
 
   return (
-    <Box height={'88vh'}>
+    <Box height={'89.2vh'}>
       <Stack direction={'row'} height={'100%'} m={1}>
-        <Box className='w-1/4' p={2} >
-          <Typography position={'sticky'} variant='h4' mb={3} className='font-bold text-violet-600'><ForumIcon fontSize='large' />Connect</Typography>
+        <Box width={{md:'35%', lg:'30%'}} display={{xs:'none', md:'block'}} p={{xs:'none', md:2}} >
+          <Typography position={'sticky'} variant='h4' className='font-bold text-violet-600'><ForumIcon fontSize='large' />Connect</Typography>
           <Box height={'92%'} overflow={'scroll'}>
           {chats && chats.length>0 ? chats.map((chat)=> (
             <Box key={chat._id} alignContent={'center'} className={currentChat?.members?.find((id)=>id!==user._id) === chat?.members?.find((id)=>id!==user._id) ? "bg-blue-200 flex rounded-md" : ""} onClick={()=>setCurrentChat(chat)}>
               {currentChat?.members?.find((id)=>id!==user._id) === chat?.members?.find((id)=>id!==user._id) ? (
                 <Box className='w-1 my-auto rounded-r-sm bg-blue-500 h-16'></Box>
               ):(null)}
-              <Box m={1} p={1} px={2} >
+              <Box my={1} px={1}>
                 <Conversation key={chat._id} data={chat} currentUserId = {user._id} online={checkOnline(chat)} />
               </Box>
             </Box>
           )) : (null)}
           </Box>
         </Box>
-        <Box className='w-3/4 bg-slate-200' height={'100%'}>
-          <ChatBox chat = {currentChat} currentUserId= {user._id} setSendMessage={setSendMessage} receiveMessage={receiveMessage}/>
-        </Box>
+        <Stack direction={'row'} justifyContent={'space-between'} width={'100%'}>
+          <Box display={{xs:'block', md:'none'}}>
+            <DrawerConversations currentChat={currentChat} setCurrentChat={setCurrentChat}/>
+          </Box>
+          <Box width={{xs:'85%', sm:'90%', md:'100%'}} bgcolor={'whitesmoke'} height={'100%'}>
+            <ChatBox chat = {currentChat} currentUserId= {user._id} setSendMessage={setSendMessage} receiveMessage={receiveMessage}/>
+          </Box>
+        </Stack>
       </Stack>
     </Box>
   )

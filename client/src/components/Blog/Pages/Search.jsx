@@ -42,8 +42,8 @@ const Search = () => {
   const {savedBlog} = useSelector((state)=>state.blog)
   
   return (
-    <Stack direction={'row'}>
-      <Box sx={{mt:'5rem', mx:'10%', width: '50%', mb:'3rem'}}>
+    <Stack direction={'row'} gap={3}>
+      <Box sx={{mt:{xs:'1rem',sm:'3rem', md:'5rem'}, ml:{xs:'2%', lg:'10%'}, width: {xs:'100%', md:'50%'}, mb:'3rem'}}>
         <Stack direction={'row'} sx={{mb:'3rem'}} spacing={1}>
           <Typography variant='h4' sx={{color:'grey', fontWeight:700}}>Results for</Typography>
           <Typography variant='h4' sx={{fontWeight:700}}>{q}</Typography>
@@ -88,7 +88,7 @@ const Search = () => {
         ):(null)}
       </Box>
       <Divider variant='middle' orientation='vertical' className=' dark:bg-gray-800'></Divider>
-      <Stack direction={'column'} width={'30%'} sx={{mt:'5rem', mr:'10%'}}>
+      <Stack direction={'column'} display={{xs:'none', md:'block'}} width={{md:'40%', lg:'30%'}} sx={{mt:'5rem', mr:{md:'5%', lg:'10%'}}}>
         {tab!=='stories' ? (
           <Stack gap={2}>
           <Typography variant='p' sx={{fontWeight:'600'}}>Blog matching {q}</Typography>

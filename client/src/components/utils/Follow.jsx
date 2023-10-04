@@ -40,11 +40,11 @@ const Follow = ({isUser, avatar, firstName, lastName, id}) => {
       </Box>
       {id !== user._id ? (
           isFriend ? (
-            <Button variant='text' size='small' color='info' onClick={() => setModalOpen(!modalOpen)}>
-              Following
+            <Button sx={{color:'green',":hover": {color:'black'}}} variant='text'  size='small' color='info' onClick={() => setModalOpen(!modalOpen)}>
+              Remove
             </Button>
           ) : (
-            <Button variant='text' size='small' color='info' onClick={handleFollow}>
+            <Button variant='contained' sx={{backgroundColor:'green', color:'white', ":hover": {backgroundColor:'white', color:'black'}}} size='small' color='info' onClick={handleFollow}>
               Follow
             </Button>
           )

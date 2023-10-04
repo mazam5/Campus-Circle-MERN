@@ -25,7 +25,7 @@ const Search = styled('div')(({ theme }) => ({
     },
     [theme.breakpoints.down('md')]: {
       marginLeft: theme.spacing(1),
-      width: '14ch',
+      width: '20ch',
     },
   }));
   
@@ -50,6 +50,10 @@ const Search = styled('div')(({ theme }) => ({
       [theme.breakpoints.up('sm')]: {
         width: '20ch',
       },
+      // [theme.breakpoints.down('md')]: {
+      //   marginLeft: theme.spacing(1),
+      //   width: '14ch',
+      // },
     },
   }));
 
@@ -101,6 +105,7 @@ const Search = styled('div')(({ theme }) => ({
   }));
 
 function Navbar({mode, setMode}) {
+  const isSmallScreen = useMediaQuery('(max-width:900px)')
   const [search, setSearch] = useState('');
   const theme = useTheme();
   const isMatch = useMediaQuery(theme.breakpoints.down('sm'))
@@ -129,7 +134,7 @@ function Navbar({mode, setMode}) {
   const {user} = useSelector((state)=>state.user)
   return (
     <>
-  <AppBar position={'sticky'} className='text-white p-4'>
+  <AppBar position={'sticky'} sx={{zIndex:9999}} className='text-white p-4'>
     <Stack direction={'row'} alignItems={'center'} justifyContent={'space-between'}>
       <Stack direction={'row'} flex={2} gap={2}>
         <Link to={'/'}>
@@ -146,7 +151,7 @@ function Navbar({mode, setMode}) {
             onChange={(e)=> setSearch(e.target.value)}
             inputProps={{ 'aria-label': 'search' }}
             endAdornment={
-              search !== '' && (
+              search !== '' && !isSmallScreen && (
                 <IconButton onClick={()=>setSearch('')}>
                   <Clear />
                 </IconButton>
@@ -181,7 +186,7 @@ function Navbar({mode, setMode}) {
                 </IconButton>
               </Tooltip>
               <Menu
-                sx={{ mt: '45px' }}
+                sx={{ mt: '45px', zIndex:999999 }}
                 id="menu-appbar"
                 anchorEl={anchorElUser}
                 anchorOrigin={{

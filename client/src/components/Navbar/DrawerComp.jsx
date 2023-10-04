@@ -88,7 +88,7 @@ const DrawerComp = ({mode, setMode}) => {
     
   return (
     <>
-        <Drawer
+      <Drawer
         sx={{
           width: '50%',
           flexShrink: 0,
