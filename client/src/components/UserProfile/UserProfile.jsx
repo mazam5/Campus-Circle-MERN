@@ -3,9 +3,9 @@ import { Navigate, useParams } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { getUserPost } from '../../Actions/Post'
 import Feed from '../Feed/Feed'
-import { Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, Divider, Fab, Stack, TextField, Typography, alertClasses } from '@mui/material'
+import { Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, Divider, Fab, Stack, TextField, Typography, alertClasses, useMediaQuery } from '@mui/material'
 import UserImage from '../utils/UserImage'
-import {Place, Chat} from '@mui/icons-material';
+import {Place, Chat, DescriptionOutlined} from '@mui/icons-material';
 import Following from '../utils/Followings'
 import Followers from '../utils/Follows'
 import Loader from '../Loader/Loader'
@@ -18,7 +18,7 @@ import axios from 'axios'
 
 const UserProfile = () => {
     const dispatch = useDispatch()
-
+    const isSmallScreen = useMediaQuery('(max-width:600px)')
     const loggedInUser = useSelector((state)=>state.user.user)
     const [myProfile, setMyProfile] = useState(false);
     const [open, setOpen] = React.useState(false);
@@ -68,7 +68,7 @@ const UserProfile = () => {
           res2 = await axios.post('/message', {conversationId:`${res1?.data?._id}`, senderId:`${loggedInUser._id}`, text:message})
         }
       }else{
-        alert(hey)
+        alert("something went wrong")
       }
       setOpen(false);
     };
@@ -83,15 +83,20 @@ const UserProfile = () => {
     {loading ? (<Loader />) : 
       ( 
       user && (
-    <Stack direction={'row'} gap={2} py={4} height={'90vh'}>
-        <Stack direction={'column'} width = {'30%'} sx={{backgroundColor:'whitesmoke'}} gap={2} p={2} m={3} mt={1}>
+    <Stack direction={{xs:'column', md:'row'}} gap={2} py={4} height={'90vh'}>
+        <Stack direction={'column'} width = {{xs:'100',md:'40%'}} gap={{xs:1,md:2}} p={{xs:0, md:0}} m={{xs:1, md:5}} mt={1}>
+            <Box mx={'auto'} sx={{display:{xs:'block', md:'none'}}}>
+                <UserImage image = {user.avatar} width = {isSmallScreen?100: 150} height = {isSmallScreen?100:150} firstName = {user.firstName}/>
+            </Box>
             <Stack direction={'row'} mb={1} mx={'auto'} gap={2}>
-                <UserImage image = {user.avatar} width = {150} height = {150} firstName = {user.firstName}/>
-                <Stack width = {'100%'} direction={'column'} alignItems={'center'} justifyContent={'center'}>
+              <Box sx={{display:{xs:'none', md:'block'}}}>
+                <UserImage image = {user.avatar} width = {isSmallScreen?100: 150} height = {isSmallScreen?100:150} firstName = {user.firstName}/>
+              </Box>
+              <Stack width = {'100%'} direction={'column'} alignItems={'center'} justifyContent={'center'}>
                   <Typography variant='h6'>{user.firstName} {user.lastName}</Typography>
                   <Typography variant='p' display={user.location?'block' : 'none'} ><Place fontSize='small' />{user.location}</Typography>
-                  <Typography variant='p' display={user.desc?'block' : 'none'}>{user.desc}</Typography>
-                </Stack>
+                  <Typography variant='p' sx={{display: {xs:'block', md:'none',lg:'block'}}} display={user.desc?'block' : 'none'}>{user.desc}</Typography>
+              </Stack>
             </Stack>
             <Divider variant="middle" className='dark:bg-gray-50'/>
             <Stack direction={'row'} mx={5} justifyContent={'space-around'} alignItems={'center'}>
@@ -101,10 +106,11 @@ const UserProfile = () => {
             </Stack>
             <Divider variant="middle" className='dark:bg-gray-50'/>
             <Stack direction={'row'} gap={1}> 
-                <Typography variant='p' ml={2} sx={{color:'gray'}}> <Work/> Works in </Typography>
+                <Typography variant='p' ml={2} > <Work/> Works in </Typography>
                 <Typography variant='p' mr={3} >{user.company ?user.company:'...'}</Typography>
             </Stack>
             <Typography variant='p' ml={2}> <PsychologyOutlinedIcon /> {user.occupation}</Typography>
+            <Typography variant='p' ml={2} sx={{display: {xs:'none', md:'block',lg:'none'}}} display={user.desc?'block' : 'none'}><DescriptionOutlined />{" " +user.desc}</Typography>
 
             <Divider variant="middle" className='dark:bg-gray-50'/>
             <Stack direction={'row'} justifyContent={'space-between'}> 
@@ -119,7 +125,7 @@ const UserProfile = () => {
                 <Typography variant='p' ml={2} color={'gray'}> Blogs </Typography>
                 <Typography variant='p' mr={3} >{allBlog?.length} </Typography>
             </Stack>
-            <Fab variant='extended' color='primary' onClick={handleClickOpen}> <Chat sx={{ mr: 1 }}/> Chat</Fab>
+            <Button variant='contained' color='primary' onClick={handleClickOpen}> <Chat sx={{ mr: 1 }}/> Chat</Button>
 
             <Dialog open={open} onClose={handleClose} fullWidth>
               <DialogTitle>Send Message</DialogTitle>
@@ -148,7 +154,7 @@ const UserProfile = () => {
             </Dialog>
 
         </Stack>
-        <Stack width={'50%'}>
+        <Stack width = {{xs:'100',md:'50%'}} m={2}>
         <Stack direction={'row'} gap={2}>
           <Button onClick={()=>setTab('post')}>Posts</Button>
           <Button onClick={()=>setTab('blog')}>Blogs</Button>

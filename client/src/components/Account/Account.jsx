@@ -2,26 +2,25 @@ import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { getMyPost } from '../../Actions/Post'
 import Feed from '../Feed/Feed'
-import { Avatar, Box, Button, Divider, Modal, Stack, Typography } from '@mui/material'
+import { Avatar, Box, Button, Divider, Modal, Stack, Typography, useMediaQuery } from '@mui/material'
 import CreatePost from '../Feed/CreatePost'
 import UserImage from '../utils/UserImage'
 import PlaceIcon from '@mui/icons-material/Place';
 import Following from '../utils/Followings'
 import Followers from '../utils/Follows'
-import { Delete, Work } from '@mui/icons-material'
-import PsychologyOutlinedIcon from '@mui/icons-material/PsychologyOutlined';
+import { Delete, Work, DescriptionOutlined, PsychologyOutlined, Place } from '@mui/icons-material'
 import UserModal from '../leftSidebar/UserModal'
 import axios from 'axios'
 import { Logout } from '../../Actions/User'
-import { useParams } from 'react-router-dom'
 import { getBlogs, getSavedBlogs } from '../../Actions/Blog'
 import Story from '../Blog/Home/Story'
 
 const Account = () => {
     const dispatch = useDispatch()
+    const isSmallScreen = useMediaQuery('(max-width:600px)')
+    const isTabScreen = useMediaQuery('(max-width:1200px) && (min-width:900px)')
     const [open, setOpen] = useState(false)
     const [tab, setTab] = useState('post');
-    const params = useParams();
 
     const {user} = useSelector((state)=> state.user)
     useEffect(() => {
@@ -49,15 +48,20 @@ const Account = () => {
 
 
   return (
-    <Stack direction={'row'} gap={2} py={2} height={'90vh'}>
-        <Stack direction={'column'} width = {'30%'} gap={2} p={2} m={4} mt={1}>
-            <Stack direction={'row'} mb={2} ml={2} gap={2}>
-                <UserImage image = {user.avatar} width = {150} height = {150} firstName = {user.firstName}/>
-                <Stack width = {'100%'} flexWrap={'wrap'} direction={'column'} alignItems={'center'} justifyContent={'center'}>
-                    <Typography variant='h6'>{user.firstName} {user.lastName}</Typography>
-                    <Typography variant='p' display={user.location?'block' : 'none'} ><PlaceIcon fontSize='small' />{user.location}</Typography>
-                    <Typography variant='p' display={user.desc?'block' : 'none'}>{user.desc}</Typography>
-                </Stack>
+    <Stack direction={{xs:'column', md:'row'}} gap={2} py={2}>
+        <Stack direction={'column'} width = {{xs:'100',md:'40%'}} gap={{xs:1,md:2}} p={{xs:0, md:2}} m={{xs:1, md:4}} mt={1}>
+            <Box mx={'auto'} sx={{display:{xs:'block', md:'none'}}}>
+                <UserImage image = {user.avatar} width = {isSmallScreen?100: 150} height = {isSmallScreen?100:150} firstName = {user.firstName}/>
+            </Box>
+            <Stack direction={'row'} mb={1} mx={'auto'} gap={2}>
+              <Box sx={{display:{xs:'none', md:'block'}}}>
+                <UserImage image = {user.avatar} width = {isSmallScreen?100: 150} height = {isSmallScreen?100:150} firstName = {user.firstName}/>
+              </Box>
+              <Stack width = {'100%'} direction={'column'} alignItems={'center'} justifyContent={'center'}>
+                  <Typography variant='h6'>{user.firstName} {user.lastName}</Typography>
+                  <Typography variant='p' display={user.location?'block' : 'none'} ><Place fontSize='small' />{user.location}</Typography>
+                  <Typography variant='p' sx={{display: {xs:'block', md:'none',lg:'block'}}} display={user.desc?'block' : 'none'}>{user.desc}</Typography>
+              </Stack>
             </Stack>
             <Divider variant="middle" className='dark:bg-gray-300'/>
             <Stack direction={'row'} mx={5} justifyContent={'space-around'} alignItems={'center'}>
@@ -67,11 +71,12 @@ const Account = () => {
             </Stack>
             <Divider variant="middle" className='dark:bg-gray-300'/>
             <Stack direction={'row'} gap={1}> 
-                <Typography variant='p' ml={2} sx={{color:'gray'}}> <Work/> Works in </Typography>
+                <Typography variant='p' ml={2} > <Work/> Works in </Typography>
                 <Typography variant='p' mr={3} >{user.company ?user.company:'...'}</Typography>
             </Stack>
-            <Typography variant='p' ml={2}> <PsychologyOutlinedIcon /> {user.occupation}</Typography>
+            <Typography variant='p' ml={2}> <PsychologyOutlined /> {user.occupation}</Typography>
 
+            <Typography variant='p' ml={2} sx={{display: {xs:'none', md:'block',lg:'none'}}} display={user.desc?'block' : 'none'}><DescriptionOutlined />{" " +user.desc}</Typography>
             <Divider variant="middle" className='dark:bg-gray-300'/>
             <Stack direction={'row'} justifyContent={'space-between'}> 
                 <Typography variant='p' ml={2} color={'gray'}> Who's viewed your profile </Typography>
@@ -103,7 +108,7 @@ const Account = () => {
             </Modal>
         </Stack>
 
-        <Stack width={'50%'} my={2}>
+        <Stack width = {{xs:'100',md:'50%'}} m={2}>
         <Stack direction={'row'} gap={2}>
           <Button onClick={()=>setTab('post')}>Posts</Button>
           <Button onClick={()=>setTab('blog')}>Blogs</Button>

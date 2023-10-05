@@ -22,7 +22,7 @@ export const userChat = async(req,res,next)=> {
             members : {$in : [req.params.id]}
         })
         
-        res.status(200).json(chat);
+        res.status(200).json(chat.reverse());
     } catch (error) {
         console.log(error)
         return next(new ErrorHandler(error, 400));

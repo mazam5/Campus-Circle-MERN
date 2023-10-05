@@ -148,7 +148,7 @@ const DrawerComp = ({mode, setMode}) => {
                 </IconButton>
               </Tooltip>
               <Menu
-                sx={{ mt: '45px' }}
+                sx={{ mt: '45px', zIndex:999999 }}
                 id="menu-appbar"
                 anchorEl={anchorElUser}
                 anchorOrigin={{

@@ -2,7 +2,7 @@ import { Avatar, Box } from "@mui/material";
 
 const UserImage = ({image, firstName, width = 50, height = 50, isOnline=null}) => {
   return (
-    <Box position={'relative'}>
+    <Box position={'relative'} >
       <Avatar
         src={`http://localhost:8800/assets/${image}`}
         alt={firstName? firstName.toUpperCase() : "none"}
